@@ -53,27 +53,21 @@ void State::flip_random_spinn()
   int index_2  = uniform_dist(generator);
   //std::cout << "Indeksar: " << index_1  << ", " << index_2 << std::endl;
 
-  //flip the spin!
-  S(index_1, index_2) = -S(index_1, index_2);
+  //energiforskjel om spinnen flippast
    double energy_diff = delta_E(index_1, index_2);
-   //std::cout << energy_diff << std::endl;
    double rel_prob = std::exp(-energy_diff/T); //double check this!
-
 
    //godkjenningssannsyn
    double A = std::min(1.,  rel_prob);
-
-
 
    //aksepter eller avvis tilstanden
    double r = uniform_real(generator);
    //std::cout<< "r: " << r << std::endl;
    if (r <= A){
-     //std::cout << "Flipping!" << std::endl; do nothing, spin is already flipped
+     //std::cout << "Flipping!" << std::endl;
+     S(index_1, index_2) = -S(index_1, index_2); //flip the spin!
    }
-   else{
-     S(index_1, index_2) = -S(index_1, index_2); //flip it back
-   }
+
 
 }
 
