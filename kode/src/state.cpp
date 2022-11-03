@@ -11,7 +11,7 @@ State::State(int size, double temp){
   T = temp;
 
   int N = L*L;
-  arma::mat S = arma::mat(L+2, L+2);
+  S = arma::mat(L+2, L+2);
   S = arma::sign(S.randu() - 0.5);
   S.replace(0, 1);
 
@@ -19,18 +19,18 @@ State::State(int size, double temp){
   arma::vec p_right = S.col(1);
   arma::vec p_left = S.col(L);
   S.col(0) = p_left;
-  S.col(L+1) = p_right;
-
+  S.col(L+1) = p_right
+;
    arma::rowvec p_top = S.row(1);
    arma::rowvec p_bottom = S.row(L);
    S.row(0) = p_bottom;
   S.row(L+1) = p_top;
 
 
-  S(0, 0) = 0;
-  S(L+1, L+1) = 0;
-  S(L+1, 0) = 0;
-  S(0, L+1) = 0;
+   S(0, 0) = 0;
+   S(L+1, L+1) = 0;
+   S(L+1, 0) = 0;
+   S(0, L+1) = 0;
   std::cout << S << std::endl;
 }
 
