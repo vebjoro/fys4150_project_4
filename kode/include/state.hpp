@@ -11,7 +11,6 @@ struct State{
   arma::mat S;
 
 
-
   State(int L, double temp);
 
   void flip_random_spinn();

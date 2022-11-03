@@ -12,7 +12,7 @@ State::State(int size, double temp){
 
   int N = L*L;
   S = arma::mat(L+2, L+2);
-  S = arma::sign(S.randu() - 0.5);
+  S = arma::sign(S.randu()-0.4);
   S.replace(0, 1);
 
   //periodisitet
@@ -31,7 +31,15 @@ State::State(int size, double temp){
    S(L+1, L+1) = 0;
    S(L+1, 0) = 0;
    S(0, L+1) = 0;
-  std::cout << S << std::endl;
+
+
+  // unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
+  // //Construct Mersenne Twister and seed it
+  // std::mt19937 generator;
+  // std::uniform_int_distribution<int> uniform_dist(1, L);
+  // std::uniform_real_distribution<> uniform_real(0, 1);
+  // generator.seed(seed);
+
 }
 
 
@@ -47,7 +55,6 @@ void State::flip_random_spinn()
   std::uniform_int_distribution<int> uniform_dist(1, L);
   std::uniform_real_distribution<> uniform_real(0, 1);
   generator.seed(seed);
-
   //brukar generatoren til å velge ein tilfeldig spinn
   int index_1  = uniform_dist(generator); // korleis kalle på arma-element med ein index?
   int index_2  = uniform_dist(generator);
@@ -59,12 +66,12 @@ void State::flip_random_spinn()
 
    //godkjenningssannsyn
    double A = std::min(1.,  rel_prob);
-
+   std::cout << A << std::endl;
    //aksepter eller avvis tilstanden
    double r = uniform_real(generator);
-   //std::cout<< "r: " << r << std::endl;
+   std::cout<< "r: " << r << std::endl;
    if (r <= A){
-     //std::cout << "Flipping!" << std::endl;
+     std::cout << "Flipping!" << std::endl;
      S(index_1, index_2) = -S(index_1, index_2); //flip the spin!
    }
 
