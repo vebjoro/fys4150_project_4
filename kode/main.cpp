@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
   int L = 2;
   double T = 1;
   int N = 100;
-  State state = State(L, T);
+  State state = State(L, T, 1);
   std::cout << state.S << std::endl;
 
 
