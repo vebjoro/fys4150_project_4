@@ -9,6 +9,10 @@
 State::State(int size, double temp, int seed){
   L = size;
   T = temp;
+  E_sample = 0;
+  M_sample = 0;
+  E2_sample = 0;
+  M2_sample = 0;
 
   //pdf
  uniform_dist = std::uniform_int_distribution<int>(1, L);
@@ -24,6 +28,32 @@ State::State(int size, double temp, int seed){
   //periodisitet
   make_periodic();
 }
+
+
+
+void State::MC_cycle_sampling(int &j)
+{
+  E_sample = 0;
+  M_sample = 0;
+  for (int i = 0; i<N; i++){
+        flip_random_spinn();
+        E_sample += total_energy();
+        M_sample += total_magnetization();
+    }
+  e(j) = (E_sample/std::pow(N, 2)); //mean over number of spins and number of (potential) flips
+  m(j) = (M_sample/std::pow(N, 2));
+  Cv(j) = (specific_heat_capacity());
+  chai(j) = (magnetic_susceptibility());
+}
+
+void initialize_containers(int &n)
+{
+  e = arma::vec(n);
+  m = arma::vec(n);
+  Cv = arma::vec(n);
+  chai = arma::vec(n);
+}
+
 
 void State::make_periodic()
   {
@@ -77,18 +107,17 @@ void State::flip_random_spinn()
 double State::delta_E(int &index_1, int &index_2)
 {
   //std::cout << "Calculate energy difference" <<std::endl;
-  double D_inter_E = 0;
-  D_inter_E += S(index_1, index_2)*S(index_1+1, index_2);
-  D_inter_E += S(index_1, index_2)*S(index_1-1, index_2);
-   D_inter_E += S(index_1, index_2)*S(index_1, index_2+1);
-   D_inter_E += S(index_1, index_2)*S(index_1, index_2-1);
-   D_inter_E = 2*D_inter_E;
+  double e_before = 0;
+   e_before += S(index_1, index_2)*S(index_1+1, index_2);
+   e_before += S(index_1, index_2)*S(index_1-1, index_2);
+   e_before += S(index_1, index_2)*S(index_1, index_2+1);
+   e_before += S(index_1, index_2)*S(index_1, index_2-1);
 
-  return D_inter_E;
+  return -2*e_before;
 }
 
 
-double State:: mean_energy_per_spin()
+double State:: total_energy()
 {
   //std::cout << "Kallar på midle energi" << std::endl;
   arma::mat S_inter_x = S.cols(0, L)%S.cols(1, L+1); //lagre denne matrisa som variabel?
@@ -96,12 +125,27 @@ double State:: mean_energy_per_spin()
   arma::rowvec row = arma::sum(S_inter_y.cols(1, L), 0); //summer energiar 'vertikalt'
   arma::colvec col = arma::sum(S_inter_x.rows(1, L), 1); //summer energiar horisontalt
   double energy = arma::sum(row) + arma::sum(col);
-  return energy/N;
+  return energy;
 }
 
-double State::mean_magnetization()
+
+double State::total_magnetization()
 {
   //std::cout << "Mag" << std::endl;
   double M = arma::accu(S.rows(1, L).cols(1, L));
- return std::abs(M/N);
+ return std::abs(M);
+}
+
+double State::specific_heat_capacity()
+//calculates the specific heat capacity for a state using samples from one MC cycle
+{
+  double c = 1/(N*T*T)*(E2_sample/N - std::pow(E_sample/N, 2));
+return c;
+}
+
+double State::magnetic_susceptibility()
+//calculates the magnetic susceptibility for a state using samples from one MC cycle
+{
+  double x = 1/(N*T)*(M2_sample/N - std::pow(M_sample/N, 2));
+return x;
 }

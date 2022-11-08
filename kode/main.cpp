@@ -11,15 +11,12 @@ int main(int argc, char *argv[]) {
   std::cout << state.S << std::endl;
 
 
-  // int n_cycles = 10;
-  //for (int j; j < n_cycles; j++){
-    for (int i = 0; i<N; i++){
-        state.flip_random_spinn();
-        //std::cout << state.S << std::endl;
-        double E = state.mean_energy_per_spin();
-        double M = state.mean_magnetization();
-    }
-  // }
+  int n_cycles = 10;
+  state.initialize_containers(n_cycles);
+  for (int j; j < n_cycles; j++){
+    state.MC_cycle_sampling(j);
+    std::cout << state.chai[j] << std::endl;
+  }
 
   //std::cout << state.S << std::endl;
   return 0;
