@@ -2,7 +2,7 @@
 #include <armadillo>
 #include <random>
 #include <chrono>
-
+#include <cmath>
 
 
 //konstruktør
@@ -16,9 +16,9 @@ State::State(int size, double temp, int seed){
   generator.seed(seed);
 
   //tilstandsmatrise
-  int N = L*L;
+   N = L*L;
   S = arma::mat(L+2, L+2);
-  S = arma::sign(S.randu()-0.4);
+   S = arma::sign(S.randu()-0.3);
   S.replace(0, 1);
 
   //periodisitet
@@ -85,4 +85,23 @@ double State::delta_E(int &index_1, int &index_2)
    D_inter_E = 2*D_inter_E;
 
   return D_inter_E;
+}
+
+
+double State:: mean_energy_per_spin()
+{
+  //std::cout << "Kallar på midle energi" << std::endl;
+  arma::mat S_inter_x = S.cols(0, L)%S.cols(1, L+1); //lagre denne matrisa som variabel?
+  arma::mat S_inter_y = S.rows(0, L)%S.rows(1, L+1);
+  arma::rowvec row = arma::sum(S_inter_y.cols(1, L), 0); //summer energiar 'vertikalt'
+  arma::colvec col = arma::sum(S_inter_x.rows(1, L), 1); //summer energiar horisontalt
+  double energy = arma::sum(row) + arma::sum(col);
+  return energy/N;
+}
+
+double State::mean_magnetization()
+{
+  //std::cout << "Mag" << std::endl;
+  double M = arma::accu(S.rows(1, L).cols(1, L));
+ return std::abs(M/N);
 }

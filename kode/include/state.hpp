@@ -7,6 +7,7 @@
 struct State{
 
   int L ;
+ int N;
  double T;
   arma::mat S;
   int seed;
@@ -22,6 +23,9 @@ struct State{
 
   double delta_E(int &index_1, int &index_2);
 
+  double mean_energy_per_spin();
+
+  double mean_magnetization();
 
 };
 

@@ -1,9 +1,0 @@
-gjereliste:
-
-Flytt RNG ut frå flippemetoda []
-
-Oppdater randa når ein spinn flippast []
-
-Rekn ut m, e osb. []
-
-Sjekk at simuleringa stemmer med analytisk løysing []
