@@ -46,7 +46,7 @@ void State::MC_cycle_sampling(int &j)
   chai(j) = (magnetic_susceptibility());
 }
 
-void initialize_containers(int &n)
+void State::initialize_containers(int &n)
 {
   e = arma::vec(n);
   m = arma::vec(n);
@@ -87,16 +87,19 @@ void State::flip_random_spinn()
 
   //energiforskjel om spinnen flippast
    double energy_diff = delta_E(index_1, index_2);
+   std::cout << energy_diff << std::endl;
    double rel_prob = std::exp(-energy_diff/T); //double check this!
 
    //godkjenningssannsyn
    double A = std::min(1.,  rel_prob);
+  // std::cout << rel_prob << std::endl;
    //std::cout << A << std::endl;
    //aksepter eller avvis tilstanden
    double r = uniform_real(generator);
    //std::cout<< "r: " << r << std::endl;
    if (r <= A){
-     std::cout << "Flipping!" << std::endl;
+     //std::cout << "Flipping!" << std::endl;
+     //std::cout << "Energy diff: " << energy_diff << std::endl;
      S(index_1, index_2) = -S(index_1, index_2); //flip the spin!
      make_periodic();
    }
@@ -120,11 +123,12 @@ double State::delta_E(int &index_1, int &index_2)
 double State:: total_energy()
 {
   //std::cout << "Kallar på midle energi" << std::endl;
-  arma::mat S_inter_x = S.cols(0, L)%S.cols(1, L+1); //lagre denne matrisa som variabel?
-  arma::mat S_inter_y = S.rows(0, L)%S.rows(1, L+1);
-  arma::rowvec row = arma::sum(S_inter_y.cols(1, L), 0); //summer energiar 'vertikalt'
-  arma::colvec col = arma::sum(S_inter_x.rows(1, L), 1); //summer energiar horisontalt
-  double energy = arma::sum(row) + arma::sum(col);
+  double energy = 0;
+  for (int i=1;i<=L;i++){
+    for (int j=1; j<= L; j++){
+      energy += S(i, j)*S(i+1, j) + S(i, j)*S(i, j+1);
+    }
+  }
   return energy;
 }
 
