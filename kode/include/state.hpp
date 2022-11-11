@@ -4,10 +4,11 @@
 #include <armadillo>
 
 // Structure
-struct State{
+struct State
+{
 
-  int L ;
- int N;
+  int L;
+  int N;
   double T;
   arma::mat S;
   int seed;
@@ -17,13 +18,13 @@ struct State{
 
   double E;
   double M;
- double E2;
+  double E2;
   double M2;
 
   arma::vec e;
   arma::vec m;
   arma::vec Cv;
-  arma::vec chai;
+  arma::vec chi;
 
   State(int L, double temp, int seed);
 
@@ -31,7 +32,7 @@ struct State{
 
   void initialize_containers(int &n);
 
-  void flip_random_spinn();
+  double flip_random_spinn();
 
   void make_periodic();
 
@@ -44,10 +45,6 @@ struct State{
   double specific_heat_capacity();
 
   double magnetic_susceptibility();
-
-
-
 };
-
 
 #endif // STATE_H_
