@@ -28,6 +28,10 @@ struct State
 
   State(int L, double temp, int seed);
 
+  void init_random_state();
+
+  void init_uniform_state();
+
   void MC_cycle_sampling(int &j);
 
   void initialize_containers(int &n);

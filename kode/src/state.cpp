@@ -23,9 +23,23 @@ State::State(int size, double temp, int seed)
   // State matrix
   N = L * L;
   S = arma::mat(L + 2, L + 2);
-  S = arma::sign(S.randu() - 0.5);
+}
 
+// Initialize random state
+void State::init_random_state()
+{
+
+  S = arma::sign(S.randu() - 0.3);
   S.replace(0, 1);
+
+  // Initialize periodic boundary conditions
+  make_periodic();
+}
+
+// Initialize uniform positive state
+void State::init_uniform_state()
+{
+  S = arma::ones(L + 2, L + 2);
 
   // Initialize periodic boundary conditions
   make_periodic();

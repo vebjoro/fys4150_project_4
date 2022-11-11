@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
   double T = 1;
   int N = L * L;
   State state = State(L, T, 1);
+  state.init_random_state();
 
   // Analytic solution 2x2
   double Z_1 = (2 * std::exp(8) + std::exp(-8) + 12);
@@ -35,6 +36,23 @@ int main(int argc, char *argv[])
   std::cout << "--------------------------------------" << std::endl;
   std::cout << "E_calculated: " << e_mean << std::endl;
   std::cout << "M_calculated: " << m_mean << std::endl;
+
+  // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
+  L = 20;
+
+  T = 1;
+  State state_20_t01_Random = State(L, T, 1);
+  state_20_t01_Random.init_random_state();
+
+  State state_20_t01_Ordered = State(L, T, 1);
+  state_20_t01_Ordered.init_uniform_state();
+
+  T = 2.4;
+  State state_20_t24_Ordered = State(L, T, 1);
+  state_20_t24_Ordered.init_uniform_state();
+
+  State state_20_t24_Random = State(L, T, 1);
+  state_20_t24_Random.init_random_state();
 
   return 0;
 }
