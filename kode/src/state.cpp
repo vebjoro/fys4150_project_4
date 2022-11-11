@@ -14,8 +14,8 @@ State::State(int size, double temp, int seed){
   E2 = 0;
   M2 = 0;
 
-  //pdf
- uniform_dist = std::uniform_int_distribution<int>(1, L);
+  // PDF
+  uniform_dist = std::uniform_int_distribution<int>(1, L);
   uniform_real = std::uniform_real_distribution<> (0, 1);
   generator.seed(seed);
 
