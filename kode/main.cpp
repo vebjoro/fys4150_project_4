@@ -11,12 +11,12 @@ int main(int argc, char *argv[]) {
   //std::cout << state.S << std::endl;
 
   double Z_1 = (2*std::exp(8) + std::exp(-8) + 12);
-  double analytic_energy =(std::exp(-8) - std::exp(8))/Z_1;
-  double analytic_magnetization = (8*std::exp(8) + 16)/Z_1;
-  std::cout << "M_analytic: " << analytic_magnetization/4 << std::endl;
-  std::cout << "E_analytic: " << analytic_energy/4 << std::endl;
+  double analytic_energy = 4*(std::exp(-8) - std::exp(8))/Z_1;
+  double analytic_magnetization = (8*std::exp(8) + 16)/Z_1/N;
+  std::cout << "E_analytic: " << analytic_energy << std::endl;
+  std::cout << "M_analytic: " << analytic_magnetization << std::endl;
 
-  int n_cycles = 100;
+  int n_cycles = 1000000;
  state.initialize_containers(n_cycles);
   for (int j; j < n_cycles; j++){
  //   std::cout << "New cycle" << std::endl;
@@ -25,8 +25,11 @@ int main(int argc, char *argv[]) {
 
   double e_mean = arma::mean(state.e);
   double m_mean = arma::mean(state.m);
+  std::cout << "--------------------------------------" << std::endl;
+  //std::cout << state.e << std::endl;
+ std::cout << "E_calculated: " << e_mean << std::endl;
+  //std::cout << state.m << std::endl;
   std::cout << "M_calculated: " <<  m_mean << std::endl;
-  std::cout << "E_calculated: " << e_mean << std::endl;
 
   //std::cout << state.S << std::endl;
   return 0;

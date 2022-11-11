@@ -9,10 +9,10 @@
 State::State(int size, double temp, int seed){
   L = size;
   T = temp;
-  E_sample = 0;
-  M_sample = 0;
-  E2_sample = 0;
-  M2_sample = 0;
+  M = 0;
+  E = 0;
+  E2 = 0;
+  M2 = 0;
 
   //pdf
  uniform_dist = std::uniform_int_distribution<int>(1, L);
@@ -33,15 +33,22 @@ State::State(int size, double temp, int seed){
 
 void State::MC_cycle_sampling(int &j)
 {
-  E_sample = 0;
-  M_sample = 0;
+
   for (int i = 0; i<N; i++){
         flip_random_spinn();
-        E_sample += total_energy();
-        M_sample += total_magnetization();
-    }
-  e(j) = (E_sample/std::pow(N, 2)); //mean over number of spins and number of (potential) flips
-  m(j) = (M_sample/std::pow(N, 2));
+       }
+  E = total_energy();
+  M = total_magnetization();
+  E2 = std::pow(E, 2);
+  M2 = std::pow(M, 2);
+
+  // std::cout << "--------------------------------------" << std::endl;
+        // std::cout << S << std::endl;
+        // std::cout <<  "M: " << M_sample << std::endl;
+        // std::cout <<  "E: " << E_sample << std::endl;
+
+  e(j) = E/N; //mean over number of spins
+  m(j) = M/N;
   Cv(j) = (specific_heat_capacity());
   chai(j) = (magnetic_susceptibility());
 }
@@ -87,7 +94,7 @@ void State::flip_random_spinn()
 
   //energiforskjel om spinnen flippast
    double energy_diff = delta_E(index_1, index_2);
-   std::cout << energy_diff << std::endl;
+   //std::cout << energy_diff << std::endl;
    double rel_prob = std::exp(-energy_diff/T); //double check this!
 
    //godkjenningssannsyn
@@ -111,10 +118,10 @@ double State::delta_E(int &index_1, int &index_2)
 {
   //std::cout << "Calculate energy difference" <<std::endl;
   double e_before = 0;
-   e_before += S(index_1, index_2)*S(index_1+1, index_2);
-   e_before += S(index_1, index_2)*S(index_1-1, index_2);
-   e_before += S(index_1, index_2)*S(index_1, index_2+1);
-   e_before += S(index_1, index_2)*S(index_1, index_2-1);
+   e_before -= S(index_1, index_2)*S(index_1+1, index_2);
+   e_before -= S(index_1, index_2)*S(index_1-1, index_2);
+   e_before -= S(index_1, index_2)*S(index_1, index_2+1);
+   e_before -= S(index_1, index_2)*S(index_1, index_2-1);
 
   return -2*e_before;
 }
@@ -122,11 +129,11 @@ double State::delta_E(int &index_1, int &index_2)
 
 double State:: total_energy()
 {
-  //std::cout << "Kallar på midle energi" << std::endl;
+  //std::cout << "Kallar total energi" << std::endl;
   double energy = 0;
   for (int i=1;i<=L;i++){
     for (int j=1; j<= L; j++){
-      energy += S(i, j)*S(i+1, j) + S(i, j)*S(i, j+1);
+      energy -= S(i, j)*S(i+1, j) + S(i, j)*S(i, j+1);
     }
   }
   return energy;
@@ -135,21 +142,22 @@ double State:: total_energy()
 
 double State::total_magnetization()
 {
-  //std::cout << "Mag" << std::endl;
+ //std::cout << "Mag" << std::endl;
   double M = arma::accu(S.rows(1, L).cols(1, L));
- return std::abs(M);
+  M = std::abs(M);
+ return M;
 }
 
 double State::specific_heat_capacity()
 //calculates the specific heat capacity for a state using samples from one MC cycle
 {
-  double c = 1/(N*T*T)*(E2_sample/N - std::pow(E_sample/N, 2));
+  double c = 1/(N*T*T)*(E2/N - std::pow(E/N, 2));
 return c;
 }
 
 double State::magnetic_susceptibility()
 //calculates the magnetic susceptibility for a state using samples from one MC cycle
 {
-  double x = 1/(N*T)*(M2_sample/N - std::pow(M_sample/N, 2));
+  double x = 1/(N*T)*(M2/N - std::pow(M/N, 2));
 return x;
 }

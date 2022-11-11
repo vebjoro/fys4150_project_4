@@ -15,10 +15,10 @@ struct State{
   std::uniform_int_distribution<int> uniform_dist;
   std::uniform_real_distribution<> uniform_real;
 
-  double E_sample;
-  double M_sample;
- double E2_sample;
-  double M2_sample;
+  double E;
+  double M;
+ double E2;
+  double M2;
 
   arma::vec e;
   arma::vec m;
