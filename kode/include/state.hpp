@@ -30,7 +30,7 @@ struct State
 
   void init_random_state();
 
-  void init_uniform_state();
+  void init_ordered_state();
 
   void MC_cycle_sampling(int &j);
 

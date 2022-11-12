@@ -39,20 +39,56 @@ int main(int argc, char *argv[])
 
   // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
   L = 20;
+  n_cycles = 2000;
 
   T = 1;
   State state_20_t01_Random = State(L, T, 1);
-  state_20_t01_Random.init_random_state();
+  state_20_t01_Random.init_random_state(); // Random initial state
+  state_20_t01_Random.initialize_containers(n_cycles);
 
   State state_20_t01_Ordered = State(L, T, 1);
-  state_20_t01_Ordered.init_uniform_state();
+  state_20_t01_Ordered.init_ordered_state(); // Ordered initial state
+  state_20_t01_Ordered.initialize_containers(n_cycles);
 
   T = 2.4;
-  State state_20_t24_Ordered = State(L, T, 1);
-  state_20_t24_Ordered.init_uniform_state();
-
   State state_20_t24_Random = State(L, T, 1);
-  state_20_t24_Random.init_random_state();
+  state_20_t24_Random.init_random_state(); // Random initial state
+  state_20_t24_Random.initialize_containers(n_cycles);
+
+  State state_20_t24_Ordered = State(L, T, 1);
+  state_20_t24_Ordered.init_ordered_state(); // Ordered initial state
+  state_20_t24_Ordered.initialize_containers(n_cycles);
+
+  // Simulate states 20x20
+  arma::mat out_E = arma::zeros(4, n_cycles); // 4 states, n_cycles (Energy)
+  arma::mat out_M = arma::zeros(4, n_cycles); // 4 states, n_cycles (Magnetization)
+
+  for (int j = 0; j < n_cycles; j++)
+  {
+    state_20_t01_Random.MC_cycle_sampling(j);
+    state_20_t01_Ordered.MC_cycle_sampling(j);
+    state_20_t24_Random.MC_cycle_sampling(j);
+    state_20_t24_Ordered.MC_cycle_sampling(j);
+
+    out_E(0, j) = arma::mean(state_20_t01_Random.e(arma::span(0, j)));
+    out_E(1, j) = arma::mean(state_20_t01_Ordered.e(arma::span(0, j)));
+    out_E(2, j) = arma::mean(state_20_t24_Random.e(arma::span(0, j)));
+    out_E(3, j) = arma::mean(state_20_t24_Ordered.e(arma::span(0, j)));
+
+    out_M(0, j) = arma::mean(state_20_t01_Random.m(arma::span(0, j)));
+    out_M(1, j) = arma::mean(state_20_t01_Ordered.m(arma::span(0, j)));
+    out_M(2, j) = arma::mean(state_20_t24_Random.m(arma::span(0, j)));
+    out_M(3, j) = arma::mean(state_20_t24_Ordered.m(arma::span(0, j)));
+  }
+
+  // Save to file
+  std::string outfile;
+
+  outfile = "plot/binary_data/20x20_E.bin";
+  out_E.save(outfile, arma::arma_binary);
+
+  outfile = "plot/binary_data/20x20_M.bin";
+  out_M.save(outfile, arma::arma_binary);
 
   return 0;
 }

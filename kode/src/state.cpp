@@ -36,8 +36,8 @@ void State::init_random_state()
   make_periodic();
 }
 
-// Initialize uniform positive state
-void State::init_uniform_state()
+// Initialize ordered positive state
+void State::init_ordered_state()
 {
   S = arma::ones(L + 2, L + 2);
 
