@@ -6,12 +6,12 @@ import pyarma as pa
 
 # ENERGY
 E = pa.mat()  # Create pa.mat object (just as arma::mat in C++)
-E.load("./plot/binary_data/20x20_E.bin")
+E.load("./plot/binary_data/20x20_E_mean.bin")
 E = np.array(E)  # Convert to numpy array
 
 # MAGNETIZATION
 M = pa.mat()  # Create pa.mat object (just as arma::mat in C++)
-M.load("./plot/binary_data/20x20_M.bin")
+M.load("./plot/binary_data/20x20_M_mean.bin")
 M = np.array(M)  # Convert to numpy array
 
 

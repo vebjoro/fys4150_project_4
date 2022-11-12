@@ -36,7 +36,7 @@ State::State(int size, double temp, int seed)
 void State::init_random_state()
 {
 
-  S = arma::sign(S.randu() - 0.3);
+  S = arma::sign(S.randu() - 0.5);
   S.replace(0, 1);
 
   // Initialize periodic boundary conditions
@@ -57,13 +57,20 @@ void State::MC_cycle_sampling(int &j){
   //j is the cycle number, the samples from each cycle is written
   //to the j-th element of vectors e, m, Cv, chi, representing mean energy per spin, mean magnetization per
   //spin, specific heat capacity and magnetic susceptibility
-
+ //total_energy();
+ //total_magnetization();
+ // std::cout << "-------------------------------------------" << std::endl;
+  //std::cout << "Før: " << E << std::endl;
   for (int i = 0; i < N; i++)
   {
     flip_random_spinn();
     E +=dE;
     M+=dM;
   }
+  //std::cout << "E+dE: " << E << std::endl;
+  //total_energy();
+  //std::cout <<"Total energi: "<< E << std::endl;
+  //total_magnetization();
 
   E2 = std::pow(E, 2);
   M2 = std::pow(M, 2);
@@ -129,7 +136,9 @@ void State::flip_random_spinn()
   //std::cout << mag_diff << std::endl;
   // std::cout << energy_diff << std::endl;
   double rel_prob =  prob_dict[energy_diff];
-
+  //double rel_prob = std::exp(-energy_diff/T);
+  //std::cout << "------------------------------------------------------------------------------" << std::endl;
+   //std::cout << S.rows(index_1-1, index_1+1).cols(index_2-1, index_2+1) << std::endl;
   // Accept or reject
    double A = std::min(1., rel_prob);
    double r = uniform_real(generator);
@@ -140,9 +149,11 @@ void State::flip_random_spinn()
       dM = mag_diff;
     }
     else{
-    dE = 0; // no energy difference if not flipped
+    dE = 0;
     dM = 0;
     }
+    //std::cout << S.rows(index_1-1, index_1+1).cols(index_2-1, index_2+1) << std::endl;
+    //std::cout << dE << std::endl;
 }
 
 // Calculate the energy difference if a spin is flipped
