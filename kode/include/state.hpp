@@ -28,6 +28,8 @@ struct State
 
   arma::vec e;
   arma::vec m;
+  arma::vec E_vec;
+  arma::vec M_vec;
   arma::vec Cv;
   arma::vec chi;
 

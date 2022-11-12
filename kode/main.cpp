@@ -17,15 +17,26 @@ int main(int argc, char *argv[])
   double analytic_energy = 4 * (std::exp(-8) - std::exp(8)) / Z_1;
   double analytic_magnetization = (8 * std::exp(8) + 16) / Z_1 / N;
 
+  double expected_E = (-16 * std::exp(8) + 16 * std::exp(-8)) / Z_1;
+  double expected_E2 = (128 * std::exp(8) + 128 * std::exp(-8)) / Z_1;
+
+  double expected_M = (8 * std::exp(8) + 16) / Z_1;
+  double expected_M2 = (32 * std::exp(8) + 32) / Z_1;
+
+  double analytical_specific_heat = (1. / 4. * (expected_E2 - expected_E * expected_E));
+  double analytical_susceptibility = (1. / 4. * (expected_M2 - expected_M * expected_M));
+
   // Print analytic solution
- std::cout << "E_analytic: " << analytic_energy << std::endl;
- std::cout << "M_analytic: " << analytic_magnetization << std::endl;
+  std::cout << "E_analytic: " << analytic_energy << std::endl;
+  std::cout << "M_analytic: " << analytic_magnetization << std::endl;
+  std::cout << "C_V_analytic: " << analytical_specific_heat << std::endl;
+  std::cout << "X_analytic: " << analytical_susceptibility << std::endl;
 
   // Monte Carlo solution 2x2
   int n_cycles = 100000;
   state.initialize_containers(n_cycles);
   state.MC_burn_in(1000);
-  state.total_energy(); //calculating energy and mag of first microstate
+  state.total_energy(); // calculating energy and mag of first microstate
   state.total_magnetization();
 
   for (int j = 0; j < n_cycles; j++)
@@ -34,13 +45,15 @@ int main(int argc, char *argv[])
   }
 
   // Print Monte Carlo solution
-  double e_mean = arma::mean(state.e);
-  double m_mean = arma::mean(state.m);
+  double e_mean = arma::mean(state.E_vec / N);
+  double m_mean = arma::mean(state.M_vec / N);
   std::cout << "--------------------------------------" << std::endl;
   std::cout << "E_calculated: " << e_mean << std::endl;
   std::cout << "M_calculated: " << m_mean << std::endl;
+  // std::cout << "C_V_calculated: " << state.specific_heat_capacity() << std::endl;
+  // std::cout << "X_calculated: " << state.magnetic_susceptibility() << std::endl;
 
-//   // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
+  //   // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
   L = 20;
   n_cycles = 10000;
 
@@ -48,45 +61,41 @@ int main(int argc, char *argv[])
   State state_20_t01_Random = State(L, T, 1);
   state_20_t01_Random.init_random_state(); // Random initial state
   state_20_t01_Random.initialize_containers(n_cycles);
-   state_20_t01_Random.total_energy();
-   state_20_t01_Random.total_magnetization();
-
+  state_20_t01_Random.total_energy();
+  state_20_t01_Random.total_magnetization();
 
   State state_20_t01_Ordered = State(L, T, 1);
   state_20_t01_Ordered.init_ordered_state(); // Ordered initial state
   state_20_t01_Ordered.initialize_containers(n_cycles);
   state_20_t01_Ordered.total_energy();
-   state_20_t01_Ordered.total_magnetization();
+  state_20_t01_Ordered.total_magnetization();
 
   T = 2.4;
   State state_20_t24_Random = State(L, T, 1);
   state_20_t24_Random.init_random_state(); // Random initial state
   state_20_t24_Random.initialize_containers(n_cycles);
   state_20_t24_Random.total_energy();
-   state_20_t24_Random.total_magnetization();
-
+  state_20_t24_Random.total_magnetization();
 
   State state_20_t24_Ordered = State(L, T, 1);
   state_20_t24_Ordered.init_ordered_state(); // Ordered initial state
   state_20_t24_Ordered.initialize_containers(n_cycles);
-   state_20_t24_Ordered.total_energy();
-   state_20_t24_Ordered.total_magnetization();
-
+  state_20_t24_Ordered.total_energy();
+  state_20_t24_Ordered.total_magnetization();
 
   // Simulate states 20x20
   arma::mat out_mean_E = arma::zeros(4, n_cycles); // 4 states, n_cycles (Energy)
   arma::mat out_mean_M = arma::zeros(4, n_cycles); // 4 states, n_cycles (Magnetization)
-  arma::mat out_pdf_E = arma::zeros(4, n_cycles); // 4 states, n_cycles (Energy)
+  arma::mat out_pdf_E = arma::zeros(4, n_cycles);  // 4 states, n_cycles (Energy)
   arma::mat out_pdf_M = arma::zeros(4, n_cycles);
 
-
-  //sample expectation value to check convergence
+  // sample expectation value to check convergence
   for (int j = 0; j < n_cycles; j++)
   {
     state_20_t01_Random.MC_cycle_sampling(j);
     state_20_t01_Ordered.MC_cycle_sampling(j);
     state_20_t24_Random.MC_cycle_sampling(j);
-     state_20_t24_Ordered.MC_cycle_sampling(j);
+    state_20_t24_Ordered.MC_cycle_sampling(j);
 
     out_mean_E(0, j) = arma::mean(state_20_t01_Random.e(arma::span(0, j)));
     out_mean_E(1, j) = arma::mean(state_20_t01_Ordered.e(arma::span(0, j)));
@@ -99,7 +108,6 @@ int main(int argc, char *argv[])
     out_mean_M(3, j) = arma::mean(state_20_t24_Ordered.m(arma::span(0, j)));
   }
 
-
   // Save to file
   std::string outfile;
 
@@ -109,7 +117,7 @@ int main(int argc, char *argv[])
   outfile = "plot/binary_data/20x20_M_mean.bin";
   out_mean_M.save(outfile, arma::arma_binary);
 
-//sample pdf, assume 20x20 states to be burned in
+  // sample pdf, assume 20x20 states to be burned in
 
-   return 0;
- }
+  return 0;
+}
