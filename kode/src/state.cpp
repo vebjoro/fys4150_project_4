@@ -59,10 +59,7 @@ void State::MC_cycle_sampling(int &j)
   // j is the cycle number, the samples from each cycle is written
   // to the j-th element of vectors e, m, Cv, chi, representing mean energy per spin, mean magnetization per
   // spin, specific heat capacity and magnetic susceptibility
-  // total_energy();
-  // total_magnetization();
-  //  std::cout << "-------------------------------------------" << std::endl;
-  // std::cout << "Før: " << E << std::endl;
+
   for (int i = 0; i < N; i++)
   {
     flip_random_spinn();
