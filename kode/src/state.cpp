@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <map>
 
 // Constructor
 State::State(int size, double temp, int seed)
@@ -14,6 +15,8 @@ State::State(int size, double temp, int seed)
   E = 0;
   E2 = 0;
   M2 = 0;
+  dE = 0;
+  dM = 0;
 
   // PDF
   uniform_dist = std::uniform_int_distribution<int>(1, L);
@@ -23,6 +26,11 @@ State::State(int size, double temp, int seed)
   // State matrix
   N = L * L;
   S = arma::mat(L + 2, L + 2);
+
+  //calculate five possible relative probabilities for acceptance
+  for (int i=-2; i<=2; i++){
+    prob_dict[i*4.] = std::exp(-i*4. / T);
+     }
 }
 
 // Initialize random state
@@ -45,22 +53,25 @@ void State::init_ordered_state()
   make_periodic();
 }
 
-void State::MC_cycle_sampling(int &j)
-{
-  E = total_energy(); // Initial energy
+void State::MC_cycle_sampling(int &j){
+  //assumes energy and magnetization of the previous microstate to be known
+  //j is the cycle number, the samples from each cycle is written
+  //to the j-th element of vectors e, m, Cv, chi, representing mean energy per spin, mean magnetization per
+  //spin, specific heat capacity and magnetic susceptibility
 
   for (int i = 0; i < N; i++)
   {
-    E += flip_random_spinn();
+    flip_random_spinn();
+    E +=dE;
+    M+=dM;
   }
 
-  M = total_magnetization();
   E2 = std::pow(E, 2);
   M2 = std::pow(M, 2);
 
   // Mean over number of spins
   e(j) = E / N;
-  m(j) = M / N;
+  m(j) = std::abs(M / N);
 
   Cv(j) = (specific_heat_capacity());
   chi(j) = (magnetic_susceptibility());
@@ -94,43 +105,35 @@ void State::make_periodic()
   S(0, L + 1) = 0;
 }
 
-// Flip a random spin
-double State::flip_random_spinn()
+// Flip a random spin according to the Boltzmann dist. for the given temperature
+void State::flip_random_spinn()
 {
-  // std::cout << "Calling flip spinn" << std::endl;
-
   // Chose random spin
   int index_1 = uniform_dist(generator); // korleis kalle på arma-element med ein index?
   int index_2 = uniform_dist(generator);
 
   // std::cout << "Indeksar: " << index_1  << ", " << index_2 << std::endl;
 
-  // energiforskjel om spinnen flippast
+  //energiforskjel om spinnen flippast
   double energy_diff = delta_E(index_1, index_2);
+  double mag_diff = -2*S(index_1, index_2);
+  //std::cout << mag_diff << std::endl;
   // std::cout << energy_diff << std::endl;
-  double rel_prob = std::exp(-energy_diff / T); // double check this!
+  double rel_prob =  prob_dict[energy_diff];
 
   // Accept or reject
-  double A = std::min(1., rel_prob);
-  if (A > 1.0)
-  {
-    S(index_1, index_2) *= -1;
-    make_periodic();
-  }
-  else
-  {
-    double r = uniform_real(generator);
-    if (A > r)
-    {
+   double A = std::min(1., rel_prob);
+   double r = uniform_real(generator);
+    if (A > r){
       S(index_1, index_2) *= -1;
       make_periodic();
+      dE = energy_diff; //update change in system
+      dM = mag_diff;
     }
-    else
-    {
-      return 0; // no energy difference if not flipped
+    else{
+    dE = 0; // no energy difference if not flipped
+    dM = 0;
     }
-  }
-  return energy_diff; // return energy difference if flipped
 }
 
 // Calculate the energy difference if a spin is flipped
@@ -164,7 +167,6 @@ double State::total_energy()
 double State::total_magnetization()
 {
   double M = arma::accu(S.rows(1, L).cols(1, L));
-  M = std::abs(M);
   return M;
 }
 

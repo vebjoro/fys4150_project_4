@@ -2,6 +2,7 @@
 #define STATE_H_
 
 #include <armadillo>
+#include <map>
 
 // Structure
 struct State
@@ -16,10 +17,14 @@ struct State
   std::uniform_int_distribution<int> uniform_dist;
   std::uniform_real_distribution<> uniform_real;
 
+  std::map<double, double> prob_dict;
+
   double E;
   double M;
   double E2;
   double M2;
+  double dE;
+  double dM;
 
   arma::vec e;
   arma::vec m;
@@ -36,7 +41,7 @@ struct State
 
   void initialize_containers(int &n);
 
-  double flip_random_spinn();
+  void flip_random_spinn();
 
   void make_periodic();
 
