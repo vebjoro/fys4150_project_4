@@ -11,17 +11,16 @@ State::State(int size, double temp, int seed)
 {
   L = size;
   T = temp;
-  M = 0;
-  E = 0;
-  E2 = 0;
-  M2 = 0;
-  dE = 0;
-  dM = 0;
-
   // PDF
   uniform_dist = std::uniform_int_distribution<int>(1, L);
   uniform_real = std::uniform_real_distribution<>(0, 1);
   generator.seed(seed);
+  M = 0; //total_magnetization();
+  E = 0; //total_energy();
+  E2 = 0;
+  M2 = 0;
+  dE = 0;
+  dM = 0;
 
   // State matrix
   N = L * L;
@@ -75,6 +74,16 @@ void State::MC_cycle_sampling(int &j){
 
   Cv(j) = (specific_heat_capacity());
   chi(j) = (magnetic_susceptibility());
+}
+
+
+void State::MC_burn_in(int k){
+  //do N potential flips per MC-cycle, k is the
+  //number of cycles
+  for (int i = 0; i < N*k; i++)
+  {
+    flip_random_spinn();
+  }
 }
 
 void State::initialize_containers(int &n)
@@ -150,7 +159,8 @@ double State::delta_E(int &index_1, int &index_2)
 }
 
 // Calculate the total energy of one state
-double State::total_energy()
+// store to member variable E
+void State::total_energy()
 {
   double energy = 0;
   for (int i = 1; i <= L; i++)
@@ -160,14 +170,14 @@ double State::total_energy()
       energy -= S(i, j) * S(i + 1, j) + S(i, j) * S(i, j + 1);
     }
   }
-  return energy;
+  E = energy;
 }
 
 // Calculate the total magnetization of one state
-double State::total_magnetization()
+// store to member var M
+void State::total_magnetization()
 {
-  double M = arma::accu(S.rows(1, L).cols(1, L));
-  return M;
+  M = arma::accu(S.rows(1, L).cols(1, L));
 }
 
 double State::specific_heat_capacity()

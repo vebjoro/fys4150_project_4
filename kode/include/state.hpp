@@ -39,6 +39,8 @@ struct State
 
   void MC_cycle_sampling(int &j);
 
+  void MC_burn_in(int k);
+
   void initialize_containers(int &n);
 
   void flip_random_spinn();
@@ -47,9 +49,9 @@ struct State
 
   double delta_E(int &index_1, int &index_2);
 
-  double total_energy();
+  void total_energy();
 
-  double total_magnetization();
+  void total_magnetization();
 
   double specific_heat_capacity();
 
