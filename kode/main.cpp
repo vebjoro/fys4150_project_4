@@ -1,9 +1,12 @@
 #include <iostream>
 #include <armadillo>
 #include "state.hpp"
+#include "progressbar.hpp"
 
 int main(int argc, char *argv[])
 {
+
+
 
   // Initialize 2x2 state
   int L = 2;
@@ -81,6 +84,7 @@ int main(int argc, char *argv[])
 
 
   //sample expectation value to check convergence
+  std::cout << "Sampling expectation value" << std::endl;
   for (int j = 0; j < n_cycles; j++)
   {
     state_20_t01_Random.MC_cycle_sampling(j);
@@ -104,12 +108,38 @@ int main(int argc, char *argv[])
   std::string outfile;
 
   outfile = "plot/binary_data/20x20_E_mean.bin";
-  out_mean_E.save(outfile, arma::arma_binary);
+  //out_mean_E.save(outfile, arma::arma_binary);
 
   outfile = "plot/binary_data/20x20_M_mean.bin";
-  out_mean_M.save(outfile, arma::arma_binary);
+  //out_mean_M.save(outfile, arma::arma_binary);
+
+
+
 
 //sample pdf, assume 20x20 states to be burned in
+  n_cycles = 100000;
+  state_20_t01_Random.initialize_containers(n_cycles);
+  state_20_t24_Random.initialize_containers(n_cycles);
+  state_20_t01_Random.total_energy();
+ state_20_t24_Random.total_energy();
+  state_20_t01_Random.total_magnetization();
+  state_20_t24_Random.total_magnetization();
+
+  progressbar bar(n_cycles);
+  std::cout << "Sampling pdf" << std::endl;
+  for (int j = 0; j < n_cycles; j++)
+  {
+    state_20_t01_Random.MC_cycle_sampling(j);
+    state_20_t24_Random.MC_cycle_sampling(j);
+    bar.update();
+  }
+
+  outfile = "plot/binary_data/20x20_1_e.bin";
+  //state_20_t01_Random.e.save(outfile, arma::arma_binary);
+
+  outfile = "plot/binary_data/20x20_24_e.bin";
+  //state_20_t24_Random.e.save(outfile, arma::arma_binary);
+
 
    return 0;
  }
