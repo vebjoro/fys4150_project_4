@@ -1,3 +1,5 @@
 main
 main.exe
 .vscode
+binary_data
+.DS_Store
