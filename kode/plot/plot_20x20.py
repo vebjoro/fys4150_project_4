@@ -14,19 +14,11 @@ M = pa.mat()  # Create pa.mat object (just as arma::mat in C++)
 M.load("./plot/binary_data/20x20_M_mean.bin")
 M = np.array(M)  # Convert to numpy array
 
-#energy per spin
-e_1 = pa.mat()
-e_24 = pa.mat()
-e_1.load("./plot/binary_data/20x20_1_e.bin")
-e_24.load("./plot/binary_data/20x20_24_e.bin")
-e_1 = np.array(e_1)
-e_24 = np.array(e_24)
 
 """
 MATRIX INDICES (Temprature, Initial state)
 0: T = 1, Random  |  1: T = 1, Ordered |  2: T = 2.4, Random |  3: T = 2.4, Ordered
 """
-
 n_cycles = len(E[0])
 
 """Plot"""
@@ -145,15 +137,22 @@ plt.grid()
 
 plt.savefig("plot/figures/20x20_24_M.pdf")
 
+# ENERGY PER SPIN TODO: Fix xlabel etc.
+e_1 = pa.mat()
+e_24 = pa.mat()
+e_1.load("./plot/binary_data/20x20_1_e.bin")
+e_24.load("./plot/binary_data/20x20_24_e.bin")
+e_1 = np.array(e_1)
+e_24 = np.array(e_24)
 
-#Energy histogram T = 1
-counts, bins = np.histogram(e_1, bins = 400)
+# Energy histogram T = 1
+counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
-plt.savefig("plot/figures/20x20_1_pdf.pdf")
+plt.savefig("plot/figures/20x20_1_HIST.pdf")
 
-#Energy histogram T = 2.4
-counts, bins = np.histogram(e_24, bins = 400)
+# Energy histogram T = 2.4
+counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
-plt.savefig("plot/figures/20x20_24_pdf.pdf")
+plt.savefig("plot/figures/20x20_24_HIST.pdf")
