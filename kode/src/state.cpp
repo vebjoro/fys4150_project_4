@@ -26,7 +26,7 @@ State::State(int size, double temp, int seed)
   N = L * L;
   S = arma::mat(L + 2, L + 2);
 
-  // calculate five possible relative probabilities for acceptance
+  // Calculate five possible relative probabilities for acceptance
   for (int i = -2; i <= 2; i++)
   {
     prob_dict[i * 4.] = std::exp(-i * 4. / T);
@@ -188,16 +188,13 @@ void State::total_magnetization()
 double State::specific_heat_capacity()
 // Calculates the specific heat capacity for a state using samples from one MC cycle
 {
-  double c = (1. / 4.) * (-arma::mean(E_vec) * arma::mean(E_vec));
+  double c = (1. / 4.) * (arma::mean(E_vec % E_vec) - arma::mean(E_vec) * arma::mean(E_vec));
   return c;
 }
 
 double State::magnetic_susceptibility()
 // Calculates the magnetic susceptibility for a state using samples from one MC cycle
 {
-  double x = (1. / 4.) * (-arma::mean(M_vec) * arma::mean(M_vec));
+  double x = (1. / 4.) * (arma::mean(M_vec % M_vec) - arma::mean(M_vec) * arma::mean(M_vec));
   return x;
 }
-
-// arma::mean(E_vec % E_vec)
-// arma::mean(M_vec % M_vec)
