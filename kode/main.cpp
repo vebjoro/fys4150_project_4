@@ -191,29 +191,25 @@ int main(int argc, char *argv[])
         state_100.MC_cycle_sampling(j);
       }
 
-      e_out(0, i) = arma::mean(state_20.E_vec / N);
-      e_out(1, i) = arma::mean(state_40.E_vec / N);
-      e_out(2, i) = arma::mean(state_60.E_vec / N);
-      e_out(3, i) = arma::mean(state_80.E_vec / N);
-      e_out(4, i) = arma::mean(state_100.E_vec / N);
+      e_out(0, i) = arma::mean(state_40.E_vec / N);
+      e_out(1, i) = arma::mean(state_60.E_vec / N);
+      e_out(2, i) = arma::mean(state_80.E_vec / N);
+      e_out(3, i) = arma::mean(state_100.E_vec / N);
 
-      m_out(0, i) = arma::mean(state_20.M_vec / N);
-      m_out(1, i) = arma::mean(state_40.M_vec / N);
-      m_out(2, i) = arma::mean(state_60.M_vec / N);
-      m_out(3, i) = arma::mean(state_80.M_vec / N);
-      m_out(4, i) = arma::mean(state_100.M_vec / N);
+      m_out(0, i) = arma::mean(state_40.M_vec / N);
+      m_out(1, i) = arma::mean(state_60.M_vec / N);
+      m_out(2, i) = arma::mean(state_80.M_vec / N);
+      m_out(3, i) = arma::mean(state_100.M_vec / N);
 
-      Cv_out(0, i) = arma::mean(state_20.Cv_vec / N);
-      Cv_out(1, i) = arma::mean(state_40.Cv_vec / N);
-      Cv_out(2, i) = arma::mean(state_60.Cv_vec / N);
-      Cv_out(3, i) = arma::mean(state_80.Cv_vec / N);
-      Cv_out(4, i) = arma::mean(state_100.Cv_vec / N);
+      Cv_out(0, i) = state_40.specific_heat_capacity();
+      Cv_out(1, i) = state_40.specific_heat_capacity();
+      Cv_out(2, i) = state_60.specific_heat_capacity();
+      Cv_out(3, i) = state_80.specific_heat_capacity();
 
-      X_out(0, i) = arma::mean(state_20.X_vec / N);
-      X_out(1, i) = arma::mean(state_40.X_vec / N);
-      X_out(2, i) = arma::mean(state_60.X_vec / N);
-      X_out(3, i) = arma::mean(state_80.X_vec / N);
-      X_out(4, i) = arma::mean(state_100.X_vec / N);
+      X_out(0, i) = state_40.magnetic_susceptibility();
+      X_out(1, i) = state_40.magnetic_susceptibility();
+      X_out(2, i) = state_60.magnetic_susceptibility();
+      X_out(3, i) = state_80.magnetic_susceptibility();
     }
   }
 
