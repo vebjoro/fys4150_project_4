@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <armadillo>
 #include "omp.h"
 #include "state.hpp"
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
   int number_of_temperatures = 80;                                    // TODO: Discuss this
   n_cycles = 3000;                                                    // TODO: Discuss this
   arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
-
+}
   arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
   arma::mat m_out = arma::zeros(4, number_of_temperatures);
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);
