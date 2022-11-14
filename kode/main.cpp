@@ -1,11 +1,12 @@
 #include <iostream>
 #include <armadillo>
-#include <omp.h> // OpenMP
+#include "omp.h"
 #include "state.hpp"
 #include "progressbar.hpp"
 
 int main(int argc, char *argv[])
 {
+  std::string outfile;
 
   // Initialize 2x2 state
   int L = 2;
@@ -109,7 +110,6 @@ int main(int argc, char *argv[])
   }
 
   // Save to file
-  std::string outfile;
 
   outfile = "plot/binary_data/20x20_E_mean.bin";
   out_mean_E.save(outfile, arma::arma_binary);
@@ -142,8 +142,8 @@ int main(int argc, char *argv[])
   state_20_t24_Random.e.save(outfile, arma::arma_binary);
 
   // Phase transition investigation with OpenMP
-  int number_of_temperatures = 10;
-  n_cycles = 1000;                                                    // TODO: Discuss this
+  int number_of_temperatures = 80;                                    // TODO: Discuss this
+  n_cycles = 3000;                                                    // TODO: Discuss this
   arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
 
   arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);
   arma::mat X_out = arma::zeros(4, number_of_temperatures);
 
-#pragma omp paralell
+#pragma omp parallel
   {
 #pragma omp for
     for (int i = 0; i < number_of_temperatures; i++)
@@ -184,34 +184,36 @@ int main(int argc, char *argv[])
 
       for (int j = 0; j < n_cycles; j++)
       {
-        state_20.MC_cycle_sampling(j);
         state_40.MC_cycle_sampling(j);
         state_60.MC_cycle_sampling(j);
         state_80.MC_cycle_sampling(j);
         state_100.MC_cycle_sampling(j);
       }
 
-      e_out(0, i) = arma::mean(state_40.E_vec / N);
-      e_out(1, i) = arma::mean(state_60.E_vec / N);
-      e_out(2, i) = arma::mean(state_80.E_vec / N);
-      e_out(3, i) = arma::mean(state_100.E_vec / N);
+      e_out(0, i) = arma::mean(state_40.E_vec / 40 / 40);
+      e_out(1, i) = arma::mean(state_60.E_vec / 60 / 60);
+      e_out(2, i) = arma::mean(state_80.E_vec / 80 / 80);
+      e_out(3, i) = arma::mean(state_100.E_vec / 100 / 100);
 
-      m_out(0, i) = arma::mean(state_40.M_vec / N);
-      m_out(1, i) = arma::mean(state_60.M_vec / N);
-      m_out(2, i) = arma::mean(state_80.M_vec / N);
-      m_out(3, i) = arma::mean(state_100.M_vec / N);
+      m_out(0, i) = arma::mean(state_40.M_vec / 40 / 40);
+      m_out(1, i) = arma::mean(state_60.M_vec / 60 / 60);
+      m_out(2, i) = arma::mean(state_80.M_vec / 80 / 80);
+      m_out(3, i) = arma::mean(state_100.M_vec / 100 / 100);
 
       Cv_out(0, i) = state_40.specific_heat_capacity();
-      Cv_out(1, i) = state_40.specific_heat_capacity();
-      Cv_out(2, i) = state_60.specific_heat_capacity();
-      Cv_out(3, i) = state_80.specific_heat_capacity();
+      Cv_out(1, i) = state_60.specific_heat_capacity();
+      Cv_out(2, i) = state_80.specific_heat_capacity();
+      Cv_out(3, i) = state_100.specific_heat_capacity();
 
       X_out(0, i) = state_40.magnetic_susceptibility();
-      X_out(1, i) = state_40.magnetic_susceptibility();
-      X_out(2, i) = state_60.magnetic_susceptibility();
-      X_out(3, i) = state_80.magnetic_susceptibility();
+      X_out(1, i) = state_60.magnetic_susceptibility();
+      X_out(2, i) = state_80.magnetic_susceptibility();
+      X_out(3, i) = state_100.magnetic_susceptibility();
     }
-  }
+  } // end pragma omp parallel
+
+  outfile = "plot/binary_data/OMP_T_out.bin";
+  T_vec.save(outfile, arma::arma_binary);
 
   outfile = "plot/binary_data/OMP_e_out.bin";
   e_out.save(outfile, arma::arma_binary);

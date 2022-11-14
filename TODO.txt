@@ -1,0 +1,5 @@
+- Problem 9
+
+- Lage en form for timer for parallelisert kode
+
+- Rapport
