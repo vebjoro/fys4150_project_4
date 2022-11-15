@@ -14,17 +14,16 @@ int main(int argc, char *argv[])
   int number_of_temperatures = 80;                                    // TODO: Discuss this
   int n_cycles = 3000;                                                    // TODO: Discuss this
   arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
-}
+
   arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
   arma::mat m_out = arma::zeros(4, number_of_temperatures);
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);
   arma::mat X_out = arma::zeros(4, number_of_temperatures);
 
-//#pragma omp parallel
-  //{
-//#pragma omp for
+#pragma omp parallel
+  {
+#pragma omp for
     for (int i = 0; i < number_of_temperatures; i++)
-
     {
 
       State state_40 = State(40, T_vec(i), 1);
@@ -83,7 +82,7 @@ int main(int argc, char *argv[])
       X_out(2, i) = state_80.magnetic_susceptibility();
       X_out(3, i) = state_100.magnetic_susceptibility();
     }
-  //} // end pragma omp parallel
+  } // end pragma omp parallel
 
   outfile = "plot/binary_data/OMP_T_out.bin";
   T_vec.save(outfile, arma::arma_binary);

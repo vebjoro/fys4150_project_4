@@ -8,7 +8,9 @@ prob_56:
 	./main
 
 prob_8:
-	g++ prob_8.cpp src/state.cpp -fopenmp -std=c++11 -I include -larmadillo  -lomp -o main
+	g++ -c prob_8.cpp src/state.cpp -I include -fopenmp -std=c++11
+	g++ prob_8.o state.o -larmadillo  -lomp -o main
+	rm prob_8.o state.o
 	./main
 
 mac8:
