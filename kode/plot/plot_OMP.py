@@ -5,7 +5,8 @@ import pyarma as pa
 """Load data"""
 T = pa.mat()
 T.load("./plot/binary_data/OMP_T_out.bin")
-T = np.array(T).T[0]  # Convert to numpy array and transpose
+T = np.array(T) #.T[0]  # Convert to numpy array and transpose
+print(T)
 
 e = pa.mat()
 e.load("./plot/binary_data/OMP_e_out.bin")
@@ -33,7 +34,7 @@ plt.legend()
 plt.xlabel("Temperature")
 plt.ylabel("Energy, expected values")
 plt.grid()
-plt.savefig("plot/figures/OMP_E.pdf")
+#plt.savefig("plot/figures/OMP_E.pdf")
 
 fig = plt.figure(figsize=(6, 4.5))
 plt.plot(T, m[0], "-", color="#8a1629", linewidth=2.0, alpha=0.8, label="40x40")
@@ -44,7 +45,7 @@ plt.legend()
 plt.xlabel("Temperature")
 plt.ylabel("Magnetization, expected values")
 plt.grid()
-plt.savefig("plot/figures/OMP_M.pdf")
+#plt.savefig("plot/figures/OMP_M.pdf")
 
 fig = plt.figure(figsize=(6, 4.5))
 plt.plot(T, Cv[0], "-", color="#8a1629", linewidth=2.0, alpha=0.8, label="40x40")
@@ -55,7 +56,7 @@ plt.legend()
 plt.xlabel("Temperature")
 plt.ylabel("Heat capacity, expected values")
 plt.grid()
-plt.savefig("plot/figures/OMP_Cv.pdf")
+#plt.savefig("plot/figures/OMP_Cv.pdf")
 
 fig = plt.figure(figsize=(6, 4.5))
 plt.plot(T, X[0], "-", color="#8a1629", linewidth=2.0, alpha=0.8, label="40x40")
@@ -66,4 +67,4 @@ plt.legend()
 plt.xlabel("Temperature")
 plt.ylabel("Magnetic susceptibility, expected values")
 plt.grid()
-plt.savefig("plot/figures/OMP_X.pdf")
+#plt.savefig("plot/figures/OMP_X.pdf")

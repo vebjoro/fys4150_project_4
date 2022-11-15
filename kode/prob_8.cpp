@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 
 
   // Phase transition investigation with OpenMP
-  int number_of_temperatures = 80;                                    // TODO: Discuss this
-  int n_cycles = 3000;                                                    // TODO: Discuss this
+  int number_of_temperatures = 10;                                    // TODO: Discuss this
+  int n_cycles = 1000000;                                                      // TODO: Discuss this
   arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
 
   arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
@@ -28,28 +28,28 @@ int main(int argc, char *argv[])
 
       State state_40 = State(40, T_vec(i), 1);
       state_40.init_random_state(); // Random initial state
-      state_40.MC_burn_in(1000); //TODO: Discuss this
+      state_40.MC_burn_in(2000); //TODO: Discuss this
       state_40.initialize_containers(n_cycles);
       state_40.total_energy();
       state_40.total_magnetization();
 
       State state_60 = State(60, T_vec(i), 1);
       state_60.init_random_state(); // Random initial state
-      state_60.MC_burn_in(1000);
+      state_60.MC_burn_in(2000);
       state_60.initialize_containers(n_cycles);
       state_60.total_energy();
       state_60.total_magnetization();
 
       State state_80 = State(80, T_vec(i), 1);
       state_80.init_random_state(); // Random initial state
-      state_80.MC_burn_in(1000);
+      state_80.MC_burn_in(2000);
       state_80.initialize_containers(n_cycles);
       state_80.total_energy();
       state_80.total_magnetization();
 
       State state_100 = State(100, T_vec(i), 1);
       state_100.init_random_state(); // Random initial state
-      state_100.MC_burn_in(1000);
+      state_100.MC_burn_in(2000);
       state_100.initialize_containers(n_cycles);
       state_100.total_energy();
       state_100.total_magnetization();
