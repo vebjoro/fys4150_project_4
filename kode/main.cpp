@@ -152,33 +152,37 @@ int main(int argc, char *argv[])
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);
   arma::mat X_out = arma::zeros(4, number_of_temperatures);
 
-#pragma omp parallel
-  {
-#pragma omp for
+//#pragma omp parallel
+  //{
+//#pragma omp for
     for (int i = 0; i < number_of_temperatures; i++)
 
     {
 
       State state_40 = State(40, T_vec(i), 1);
       state_40.init_random_state(); // Random initial state
+      state_40.MC_burn_in(1000); //TODO: Discuss this
       state_40.initialize_containers(n_cycles);
       state_40.total_energy();
       state_40.total_magnetization();
 
       State state_60 = State(60, T_vec(i), 1);
       state_60.init_random_state(); // Random initial state
+      state_60.MC_burn_in(1000);
       state_60.initialize_containers(n_cycles);
       state_60.total_energy();
       state_60.total_magnetization();
 
       State state_80 = State(80, T_vec(i), 1);
       state_80.init_random_state(); // Random initial state
+      state_80.MC_burn_in(1000);
       state_80.initialize_containers(n_cycles);
       state_80.total_energy();
       state_80.total_magnetization();
 
       State state_100 = State(100, T_vec(i), 1);
       state_100.init_random_state(); // Random initial state
+      state_100.MC_burn_in(1000);
       state_100.initialize_containers(n_cycles);
       state_100.total_energy();
       state_100.total_magnetization();
@@ -211,7 +215,7 @@ int main(int argc, char *argv[])
       X_out(2, i) = state_80.magnetic_susceptibility();
       X_out(3, i) = state_100.magnetic_susceptibility();
     }
-  } // end pragma omp parallel
+  //} // end pragma omp parallel
 
   outfile = "plot/binary_data/OMP_T_out.bin";
   T_vec.save(outfile, arma::arma_binary);
