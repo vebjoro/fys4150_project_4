@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <armadillo>
-#include "omp.h"
 #include "state.hpp"
 #include "progressbar.hpp"
 

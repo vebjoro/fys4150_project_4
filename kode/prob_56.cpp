@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <armadillo>
-#include "omp.h"
 #include "state.hpp"
 #include "progressbar.hpp"
 
@@ -10,9 +9,9 @@ int main(int argc, char *argv[])
   std::string outfile;
 
   // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
- int  L = 20;
- int N = L*L;
- int n_cycles = 10000;
+  int L = 20;
+  int N = L * L;
+  int n_cycles = 10000;
 
   int T = 1;
   State state_20_t01_Random = State(L, T, 1);
@@ -40,8 +39,8 @@ int main(int argc, char *argv[])
   state_20_t24_Ordered.total_energy();
   state_20_t24_Ordered.total_magnetization();
 
-  //prob 5
-  // Simulate states 20x20
+  // prob 5
+  //  Simulate states 20x20
   arma::mat out_mean_E = arma::zeros(4, n_cycles); // 4 states, n_cycles (Energy)
   arma::mat out_mean_M = arma::zeros(4, n_cycles); // 4 states, n_cycles (Magnetization)
   arma::mat out_pdf_E = arma::zeros(4, n_cycles);  // 4 states, n_cycles (Energy)
@@ -73,9 +72,8 @@ int main(int argc, char *argv[])
   outfile = "plot/binary_data/20x20_M_mean.bin";
   out_mean_M.save(outfile, arma::arma_binary);
 
-
-  //prob 6
-  // sample pdf, assume 20x20 states to be burned in
+  // prob 6
+  //  sample pdf, assume 20x20 states to be burned in
   n_cycles = 100000;
   state_20_t01_Random.initialize_containers(n_cycles);
   state_20_t24_Random.initialize_containers(n_cycles);
@@ -98,7 +96,6 @@ int main(int argc, char *argv[])
 
   outfile = "plot/binary_data/20x20_24_e.bin";
   state_20_t24_Random.e.save(outfile, arma::arma_binary);
-
 
   return 0;
 }
