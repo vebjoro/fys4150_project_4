@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
   state.init_random_state();
 
   // Analytic solution 2x2
-  double Z_1 = (2 * std::exp(8) + std::exp(-8) + 12);
+  double Z_1 = (2 * std::exp(8) + 2 * std::exp(-8) + 12);
   double e_analytic = 4 * (std::exp(-8) - std::exp(8)) / Z_1;
   double m_analytic = (8 * std::exp(8) + 16) / Z_1 / N;
 
@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
   double X_analytic = (1. / 4. * (expected_M2 - expected_M * expected_M));  // Magnetic susceptibility
 
   // Monte Carlo solution 2x2
-  int n_cycles = 100000;
+  int n_cycles = 1000000;
   state.initialize_containers(n_cycles);
   state.MC_burn_in(1000);
   state.total_energy(); // calculating energy and mag of first microstate
