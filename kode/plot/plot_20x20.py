@@ -33,7 +33,7 @@ plt.plot(
     color="#8a1629",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 1, Random",
+    label=r"T = 2.4 $J / k_B$, Random",
 )
 plt.plot(
     np.arange(n_cycles),
@@ -42,13 +42,16 @@ plt.plot(
     color="#8b8229",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 1, Ordered",
+    label=r"T = 1.0 $J / k_B$, Ordered",
 )
 
 plt.xlabel("Monte Carlo cycles")
-plt.ylabel("Energy, expected values")
+plt.ylabel(r"$\langle e \rangle$")
 plt.legend()
 plt.grid()
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
+
 
 plt.savefig("plot/figures/20x20_1_E.pdf")
 
@@ -61,7 +64,7 @@ plt.plot(
     color="#2c1629",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 2.4, Random",
+    label=r"T = 2.4 $J / k_B$, Random",
 )
 plt.plot(
     np.arange(n_cycles),
@@ -70,13 +73,16 @@ plt.plot(
     color="#4d8229",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 2.4, Ordered",
+    label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
 plt.xlabel("Monte Carlo cycles")
-plt.ylabel("Energy, expected values")
+plt.ylabel(r"$\langle e \rangle$")
 plt.legend()
 plt.grid()
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
+
 
 plt.savefig("plot/figures/20x20_24_E.pdf")
 
@@ -91,7 +97,7 @@ plt.plot(
     color="#8a1629",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 1, Random",
+    label=r"T = 1.0 $J / k_B$, Random",
 )
 plt.plot(
     np.arange(n_cycles),
@@ -100,12 +106,15 @@ plt.plot(
     color="#8b8229",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 1, Ordered",
+    label=r"T = 1.0 $J / k_B$, Ordered",
 )
 plt.xlabel("Monte Carlo cycles")
-plt.ylabel("Magnetization, expected values")
+plt.ylabel(r"$\langle m \rangle$")
 plt.legend()
 plt.grid()
+# Set background color to gray
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
 
 plt.savefig("plot/figures/20x20_1_M.pdf")
 
@@ -118,8 +127,10 @@ plt.plot(
     color="#2c1629",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 2.4, Random",
+    label=r"T = 2.4 $J / k_B$, Random",
 )
+
+
 plt.plot(
     np.arange(n_cycles),
     M[3],
@@ -127,13 +138,16 @@ plt.plot(
     color="#4d8229",
     linewidth=2.0,
     alpha=0.8,
-    label="T = 2.4, Ordered",
+    label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles")
-plt.ylabel("Magnetization, expected values")
+plt.xlabel("Number of Monte Carlo cycles")
+plt.ylabel(r"$\langle m \rangle$")
 plt.legend()
 plt.grid()
+# Set background color to gray
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
 
 plt.savefig("plot/figures/20x20_24_M.pdf")
 
@@ -149,10 +163,18 @@ e_24 = np.array(e_24)
 counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
+
+
 plt.savefig("plot/figures/20x20_1_HIST.pdf")
 
 # Energy histogram T = 2.4
 counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
+ax = plt.gca()
+ax.set_facecolor("#e6e6e6")
+
+
 plt.savefig("plot/figures/20x20_24_HIST.pdf")

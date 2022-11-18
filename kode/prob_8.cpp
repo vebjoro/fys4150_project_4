@@ -12,10 +12,11 @@ int main(int argc, char *argv[])
   std::string outfile;
 
   // Phase transition investigation with OpenMP
-  int number_of_temperatures = 10; // TODO: Discuss this
-  int n_cycles = 100000;           // TODO: Discuss this
-  int n_burn = 2000;
-  arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
+  int number_of_temperatures = 12; // TODO: Discuss this
+  int n_cycles = 1000000;          // TODO: Discuss this
+  int n_burn = 2500;
+  // arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
+  arma::vec T_vec = arma::linspace(2.26, 2.34, number_of_temperatures); // Temperatures to be investigated
 
   arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
   arma::mat m_out = arma::zeros(4, number_of_temperatures);
