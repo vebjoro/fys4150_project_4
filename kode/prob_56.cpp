@@ -92,9 +92,11 @@ int main(int argc, char *argv[])
   }
 
   outfile = "plot/binary_data/20x20_1_e.bin";
-  state_20_t01_Random.e.save(outfile, arma::arma_binary);
+  arma::vec e = state_20_t01_Random.E_vec / N;
+  e.save(outfile, arma::arma_binary);
 
   outfile = "plot/binary_data/20x20_24_e.bin";
+  e = state_20_t24_Random.E_vec / N;
   state_20_t24_Random.e.save(outfile, arma::arma_binary);
 
   return 0;
