@@ -4,7 +4,6 @@
 #include <armadillo>
 #include <map>
 
-// Structure
 struct State
 {
 

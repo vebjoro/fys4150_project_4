@@ -4,16 +4,15 @@ import pyarma as pa
 
 """Load data"""
 
-# ENERGY
+# Read energy
 E = pa.mat()  # Create pa.mat object (just as arma::mat in C++)
 E.load("./plot/binary_data/20x20_E_mean.bin")
 E = np.array(E)  # Convert to numpy array
 
-# MAGNETIZATION
+# Read magnetization
 M = pa.mat()  # Create pa.mat object (just as arma::mat in C++)
 M.load("./plot/binary_data/20x20_M_mean.bin")
 M = np.array(M)  # Convert to numpy array
-
 
 """
 MATRIX INDICES (Temprature, Initial state)
@@ -46,12 +45,11 @@ plt.plot(
 )
 
 plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle e \rangle$", fontsize=16)
+plt.ylabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
 plt.legend()
 plt.grid()
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
-
 
 plt.savefig("plot/figures/20x20_1_E.pdf")
 
@@ -77,12 +75,11 @@ plt.plot(
 )
 
 plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle e \rangle$", fontsize=16)
+plt.ylabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
 plt.legend()
 plt.grid()
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
-
 
 plt.savefig("plot/figures/20x20_24_E.pdf")
 
@@ -109,7 +106,7 @@ plt.plot(
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
 plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle m \rangle$", fontsize=16)
+plt.ylabel(r"$\langle |m| \rangle$", fontsize=16)
 plt.legend()
 plt.grid()
 # Set background color to gray
@@ -130,7 +127,6 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Random",
 )
 
-
 plt.plot(
     np.arange(n_cycles),
     M[3],
@@ -142,16 +138,15 @@ plt.plot(
 )
 
 plt.xlabel("Number of Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle m \rangle$", fontsize=16)
+plt.ylabel(r"$\langle |m|\rangle$", fontsize=16)
 plt.legend()
 plt.grid()
-# Set background color to gray
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
 
 plt.savefig("plot/figures/20x20_24_M.pdf")
 
-# ENERGY PER SPIN TODO: Fix xlabel etc.
+# ENERGY PER SPIN
 e_1 = pa.mat()
 e_24 = pa.mat()
 e_1.load("./plot/binary_data/20x20_1_e.bin")
@@ -162,23 +157,23 @@ e_24 = np.array(e_24)
 # Energy histogram T = 1
 counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
-plt.stairs(counts, bins)
-plt.xlabel(r"$\langle e \rangle$", fontsize=16)
-plt.ylabel(r"Number of drawn samples", fontsize=16)
+plt.stairs(counts / counts.sum(), bins, color="#4d8229")
+plt.xlabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
+plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;1.0)$", fontsize=16)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
-
+plt.tight_layout()
 
 plt.savefig("plot/figures/20x20_1_HIST.pdf")
 
 # Energy histogram T = 2.4
 counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
-plt.stairs(counts, bins)
-plt.xlabel(r"$\langle e \rangle$", fontsize=16)
-plt.ylabel("Number of drawn samples", fontsize=16)
+plt.stairs(counts / counts.sum(), bins, color="#4d8229")
+plt.xlabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
+plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;2.5)$", fontsize=16)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
-
+plt.tight_layout()
 
 plt.savefig("plot/figures/20x20_24_HIST.pdf")

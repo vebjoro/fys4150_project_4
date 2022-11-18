@@ -11,12 +11,11 @@ State::State(int size, double temp, int seed)
 {
   L = size;
   T = temp;
-  // PDF
   uniform_dist = std::uniform_int_distribution<int>(1, L);
   uniform_real = std::uniform_real_distribution<>(0, 1);
   generator.seed(seed);
-  M = 0; // total_magnetization();
-  E = 0; // total_energy();
+  M = 0; // total_magnetization() will set this
+  E = 0; // total_energy() will set this
   E2 = 0;
   M2 = 0;
   dE = 0;
@@ -55,10 +54,9 @@ void State::init_ordered_state()
 
 void State::MC_cycle_sampling(int &j)
 {
-  // assumes energy and magnetization of the previous microstate to be known
-  // j is the cycle number, the samples from each cycle is written
-  // to the j-th element of vectors e, m, Cv, chi, representing mean energy per spin, mean magnetization per
-  // spin, specific heat capacity and magnetic susceptibility
+  // Assumes energy and magnetization of the previous microstate to be known.
+  // Index j is the cycle number, the samples from each cycle is written to the
+  // j-th element of vectors E_vec and M_vec.
 
   for (int i = 0; i < N; i++)
   {
@@ -66,12 +64,6 @@ void State::MC_cycle_sampling(int &j)
     E += dE;
     M += dM;
   }
-  // std::cout << "E+dE: " << E << std::endl;
-  // total_energy();
-  // std::cout <<"Total energi: "<< E << std::endl;
-  // total_magnetization();
-
-  // Mean over number of spins
 
   E_vec(j) = E;
   M_vec(j) = std::abs(M);
@@ -79,8 +71,7 @@ void State::MC_cycle_sampling(int &j)
 
 void State::MC_burn_in(int k)
 {
-  // do N potential flips per MC-cycle, k is the
-  // number of cycles
+  // Do N potential flips per MC-cycle, k is thecnumber of cycles.
   for (int i = 0; i < N * k; i++)
   {
     flip_random_spinn();
@@ -88,7 +79,9 @@ void State::MC_burn_in(int k)
 }
 
 void State::initialize_containers(int &n)
+
 {
+  // Initialize containers for energy and magnetization
   E_vec = arma::vec(n);
   M_vec = arma::vec(n);
 }
@@ -96,7 +89,6 @@ void State::initialize_containers(int &n)
 void State::make_periodic()
 {
   // Copy edges to ensure periodic boundary conditions
-
   arma::vec p_right = S.col(1);
   arma::vec p_left = S.col(L);
   S.col(0) = p_left;
@@ -107,31 +99,29 @@ void State::make_periodic()
   S.row(L + 1) = p_top;
 
   // Set the corners to zero for visual purposes
-  S(0, 0) = 0;
-  S(L + 1, L + 1) = 0;
-  S(L + 1, 0) = 0;
-  S(0, L + 1) = 0;
+  // S(0, 0) = 0;
+  // S(L + 1, L + 1) = 0;
+  // S(L + 1, 0) = 0;
+  // S(0, L + 1) = 0;
 }
 
-// Flip a random spin according to the Boltzmann dist. for the given temperature
+// Flip a random spin according to the Boltzmann distribution for the given temperature
 void State::flip_random_spinn()
 {
-  // Chose random spin
-  int index_1 = uniform_dist(generator); // korleis kalle på arma-element med ein index?
+  // Choose random spin
+  int index_1 = uniform_dist(generator);
   int index_2 = uniform_dist(generator);
 
-  // std::cout << "Indeksar: " << index_1  << ", " << index_2 << std::endl;
-
-  // energiforskjel om spinnen flippast
+  // Difference in energy if spin is flipped
   double energy_diff = delta_E(index_1, index_2);
+
+  // Difference in magnetization if spin is flipped
   double mag_diff = -2 * S(index_1, index_2);
-  // std::cout << mag_diff << std::endl;
-  //  std::cout << energy_diff << std::endl;
+
+  // Acceptance probability
   double rel_prob = prob_dict[energy_diff];
-  // double rel_prob = std::exp(-energy_diff/T);
-  // std::cout << "------------------------------------------------------------------------------" << std::endl;
-  // std::cout << S.rows(index_1-1, index_1+1).cols(index_2-1, index_2+1) << std::endl;
-  // Accept or reject
+
+  // Accept or reject flip according to Boltzmann distribution
   double A = std::min(1., rel_prob);
   double r = uniform_real(generator);
   if (A > r)
@@ -146,14 +136,11 @@ void State::flip_random_spinn()
     dE = 0;
     dM = 0;
   }
-  // std::cout << S.rows(index_1-1, index_1+1).cols(index_2-1, index_2+1) << std::endl;
-  // std::cout << dE << std::endl;
 }
 
 // Calculate the energy difference if a spin is flipped
 double State::delta_E(int &index_1, int &index_2)
 {
-  // std::cout << "Calculate energy difference" <<std::endl;
   double e_before = 0;
   e_before -= S(index_1, index_2) * S(index_1 + 1, index_2);
   e_before -= S(index_1, index_2) * S(index_1 - 1, index_2);
@@ -164,7 +151,6 @@ double State::delta_E(int &index_1, int &index_2)
 }
 
 // Calculate the total energy of one state
-// store to member variable E
 void State::total_energy()
 {
   double energy = 0;
@@ -179,21 +165,20 @@ void State::total_energy()
 }
 
 // Calculate the total magnetization of one state
-// store to member var M
 void State::total_magnetization()
 {
   M = arma::accu(S.rows(1, L).cols(1, L));
 }
 
+// Calculate the mean specific heat capacity
 double State::specific_heat_capacity()
-// Calculates the specific heat capacity for a state using samples from one MC cycle
 {
   double c = (1. / State::L / State::L) * (arma::mean(E_vec % E_vec) - arma::mean(E_vec) * arma::mean(E_vec));
   return c;
 }
 
+// Calculate the mean magnetic susceptibility
 double State::magnetic_susceptibility()
-// Calculates the magnetic susceptibility for a state using samples from one MC cycle
 {
   double x = (1. / State::L / State::L) * (arma::mean(M_vec % M_vec) - arma::mean(M_vec) * arma::mean(M_vec));
   return x;

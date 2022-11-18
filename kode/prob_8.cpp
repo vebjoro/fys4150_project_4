@@ -12,26 +12,27 @@ int main(int argc, char *argv[])
   std::string outfile;
 
   // Phase transition investigation with OpenMP
-  int number_of_temperatures = 12; // TODO: Discuss this
-  int n_cycles = 1000000;          // TODO: Discuss this
+  int number_of_temperatures = 12;
+  int n_cycles = 1000000;
   int n_burn = 2500;
-  // arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // Temperatures to be investigated
-  arma::vec T_vec = arma::linspace(2.26, 2.34, number_of_temperatures); // Temperatures to be investigated
+  // arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // First scan
+  arma::vec T_vec = arma::linspace(2.26, 2.34, number_of_temperatures);
 
-  arma::mat e_out = arma::zeros(4, number_of_temperatures); // 4 lattice sizes
+  arma::mat e_out = arma::zeros(4, number_of_temperatures);
   arma::mat m_out = arma::zeros(4, number_of_temperatures);
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);
   arma::mat X_out = arma::zeros(4, number_of_temperatures);
 
-  // timing
+  // Timing
   auto begin = std::chrono::high_resolution_clock::now();
 
+// Simulating different lattice sizes over different temperatures
 #pragma omp parallel
   {
 #pragma omp for
     for (int i = 0; i < number_of_temperatures; i++)
     {
-
+      // 40x40
       State state_40 = State(40, T_vec(i), 1);
       state_40.init_random_state(); // Random initial state
       state_40.MC_burn_in(n_burn);  // TODO: Discuss this
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
       state_40.total_energy();
       state_40.total_magnetization();
 
+      // 60x60
       State state_60 = State(60, T_vec(i), 1);
       state_60.init_random_state(); // Random initial state
       state_60.MC_burn_in(n_burn);
@@ -46,6 +48,7 @@ int main(int argc, char *argv[])
       state_60.total_energy();
       state_60.total_magnetization();
 
+      // 80x80
       State state_80 = State(80, T_vec(i), 1);
       state_80.init_random_state(); // Random initial state
       state_80.MC_burn_in(n_burn);
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
       state_80.total_energy();
       state_80.total_magnetization();
 
+      // 100x100
       State state_100 = State(100, T_vec(i), 1);
       state_100.init_random_state(); // Random initial state
       state_100.MC_burn_in(n_burn);
@@ -60,6 +64,7 @@ int main(int argc, char *argv[])
       state_100.total_energy();
       state_100.total_magnetization();
 
+      // Running the Monte Carlo simulation
       for (int j = 0; j < n_cycles; j++)
       {
         state_40.MC_cycle_sampling(j);
@@ -68,6 +73,7 @@ int main(int argc, char *argv[])
         state_100.MC_cycle_sampling(j);
       }
 
+      // Storing the results
       e_out(0, i) = arma::mean(state_40.E_vec / 40 / 40);
       e_out(1, i) = arma::mean(state_60.E_vec / 60 / 60);
       e_out(2, i) = arma::mean(state_80.E_vec / 80 / 80);
@@ -90,12 +96,16 @@ int main(int argc, char *argv[])
     }
   } // end pragma omp parallel
 
+  // Timing
   auto end = std::chrono::high_resolution_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+
+  // Printing result of timing
   std::cout << "N_cycles: " << n_cycles << ", "
             << "T_steps: " << number_of_temperatures << std::endl;
   std::cout << "Elapsed time: " << elapsed.count() * 1e-9 << "s" << std::endl;
 
+  // Writing to file
   outfile = "plot/binary_data/OMP_T_out.bin";
   T_vec.save(outfile, arma::arma_binary);
 

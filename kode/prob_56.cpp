@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
   std::string outfile;
 
-  // Initialize 20x20 state for T = 1 J/k_B and T = 2.4 J/k_B
+  // Initialize states
   int L = 20;
   int N = L * L;
   int n_cycles = 10000;
@@ -39,13 +39,13 @@ int main(int argc, char *argv[])
   state_20_t24_Ordered.total_energy();
   state_20_t24_Ordered.total_magnetization();
 
-  // prob 5
-  //  Simulate states 20x20
+  // Initilize matrices for storing results
   arma::mat out_mean_E = arma::zeros(4, n_cycles); // 4 states, n_cycles (Energy)
   arma::mat out_mean_M = arma::zeros(4, n_cycles); // 4 states, n_cycles (Magnetization)
   arma::mat out_pdf_E = arma::zeros(4, n_cycles);  // 4 states, n_cycles (Energy)
   arma::mat out_pdf_M = arma::zeros(4, n_cycles);
 
+  // Run Monte Carlo cycles an store results
   for (int j = 0; j < n_cycles; j++)
   {
     state_20_t01_Random.MC_cycle_sampling(j);
@@ -64,16 +64,14 @@ int main(int argc, char *argv[])
     out_mean_M(3, j) = arma::mean(state_20_t24_Ordered.M_vec(arma::span(0, j)) / N);
   }
 
-  // Save to file
-
+  // Write results to file
   outfile = "plot/binary_data/20x20_E_mean.bin";
   out_mean_E.save(outfile, arma::arma_binary);
 
   outfile = "plot/binary_data/20x20_M_mean.bin";
   out_mean_M.save(outfile, arma::arma_binary);
 
-  // prob 6
-  //  sample pdf, assume 20x20 states to be burned in
+  // Siimulation for approximating the PDF
   n_cycles = 100000;
   state_20_t01_Random.initialize_containers(n_cycles);
   state_20_t24_Random.initialize_containers(n_cycles);
@@ -81,9 +79,13 @@ int main(int argc, char *argv[])
   state_20_t24_Random.total_energy();
   state_20_t01_Random.total_magnetization();
   state_20_t24_Random.total_magnetization();
+  state_20_t01_Random.MC_burn_in(2500);
+  state_20_t24_Random.MC_burn_in(2500);
 
   progressbar bar(n_cycles);
   std::cout << "Sampling pdf" << std::endl;
+
+  // Run Monte Carlo cycles
   for (int j = 0; j < n_cycles; j++)
   {
     state_20_t01_Random.MC_cycle_sampling(j);
@@ -91,6 +93,7 @@ int main(int argc, char *argv[])
     bar.update();
   }
 
+  // Write results to file
   outfile = "plot/binary_data/20x20_1_e.bin";
   arma::vec e = state_20_t01_Random.E_vec / N;
   e.save(outfile, arma::arma_binary);

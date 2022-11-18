@@ -13,12 +13,14 @@ int main(int argc, char *argv[])
   double T = 1;
   int N = L * L;
   State state = State(L, T, 1);
+
+  // Random initial state
   state.init_random_state();
 
   // Analytic solution 2x2
   double Z_1 = (2 * std::exp(8) + 2 * std::exp(-8) + 12);
-  double e_analytic = 4 * (std::exp(-8) - std::exp(8)) / Z_1;
-  double m_analytic = (8 * std::exp(8) + 16) / Z_1 / N;
+  double e_analytic = 4 * (std::exp(-8) - std::exp(8)) / Z_1; // Expected value of energy per spin
+  double m_analytic = (8 * std::exp(8) + 16) / Z_1 / N;       // Expected value of magnetization per spin
 
   double expected_E = (-16 * std::exp(8) + 16 * std::exp(-8)) / Z_1;
   double expected_E2 = (128 * std::exp(8) + 128 * std::exp(-8)) / Z_1;
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
   state.total_energy(); // calculating energy and mag of first microstate
   state.total_magnetization();
 
+  // Run Monte Carlo cycles
   for (int j = 0; j < n_cycles; j++)
   {
     state.MC_cycle_sampling(j);
