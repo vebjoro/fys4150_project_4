@@ -30,7 +30,7 @@ plt.plot(
     np.arange(n_cycles),
     E[0],
     "-",
-    color="#8a1629",
+    color="#2c1629",
     linewidth=2.0,
     alpha=0.8,
     label=r"T = 2.4 $J / k_B$, Random",
@@ -39,14 +39,14 @@ plt.plot(
     np.arange(n_cycles),
     E[1],
     "-",
-    color="#8b8229",
+    color="#4d8229",
     linewidth=2.0,
     alpha=0.8,
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles")
-plt.ylabel(r"$\langle e \rangle$")
+plt.xlabel("Monte Carlo cycles", fontsize=16)
+plt.ylabel(r"$\langle e \rangle$", fontsize=16)
 plt.legend()
 plt.grid()
 ax = plt.gca()
@@ -76,8 +76,8 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles")
-plt.ylabel(r"$\langle e \rangle$")
+plt.xlabel("Monte Carlo cycles", fontsize=16)
+plt.ylabel(r"$\langle e \rangle$", fontsize=16)
 plt.legend()
 plt.grid()
 ax = plt.gca()
@@ -94,7 +94,7 @@ plt.plot(
     np.arange(n_cycles),
     M[0],
     "-",
-    color="#8a1629",
+    color="#2c1629",
     linewidth=2.0,
     alpha=0.8,
     label=r"T = 1.0 $J / k_B$, Random",
@@ -103,13 +103,13 @@ plt.plot(
     np.arange(n_cycles),
     M[1],
     "-",
-    color="#8b8229",
+    color="#4d8229",
     linewidth=2.0,
     alpha=0.8,
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
-plt.xlabel("Monte Carlo cycles")
-plt.ylabel(r"$\langle m \rangle$")
+plt.xlabel("Monte Carlo cycles", fontsize=16)
+plt.ylabel(r"$\langle m \rangle$", fontsize=16)
 plt.legend()
 plt.grid()
 # Set background color to gray
@@ -141,8 +141,8 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Number of Monte Carlo cycles")
-plt.ylabel(r"$\langle m \rangle$")
+plt.xlabel("Number of Monte Carlo cycles", fontsize=16)
+plt.ylabel(r"$\langle m \rangle$", fontsize=16)
 plt.legend()
 plt.grid()
 # Set background color to gray
@@ -163,6 +163,8 @@ e_24 = np.array(e_24)
 counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
+plt.xlabel(r"$\langle e \rangle$", fontsize=16)
+plt.ylabel(r"Number of drawn samples", fontsize=16)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
 
@@ -173,6 +175,8 @@ plt.savefig("plot/figures/20x20_1_HIST.pdf")
 counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts, bins)
+plt.xlabel(r"$\langle e \rangle$", fontsize=16)
+plt.ylabel("Number of drawn samples", fontsize=16)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
 

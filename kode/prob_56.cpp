@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
   int N = L * L;
   int n_cycles = 10000;
 
-  int T = 1;
+  double T = 1;
   State state_20_t01_Random = State(L, T, 1);
   state_20_t01_Random.init_random_state(); // Random initial state
   state_20_t01_Random.initialize_containers(n_cycles);
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 
   outfile = "plot/binary_data/20x20_24_e.bin";
   e = state_20_t24_Random.E_vec / N;
-  state_20_t24_Random.e.save(outfile, arma::arma_binary);
+  e.save(outfile, arma::arma_binary);
 
   return 0;
 }
