@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   // Monte Carlo solution 2x2
   int n_cycles = 1000000;
   state.initialize_containers(n_cycles);
-  state.MC_burn_in(1000);
+  state.MC_burn_in(10);
   state.total_energy(); // calculating energy and mag of first microstate
   state.total_magnetization();
 
