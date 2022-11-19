@@ -31,8 +31,8 @@ Tc = []
 for i in range(4):
     k  = np.argmax(Cv[i])
     l = np.argmax(X[i])
-    Tc.append((T[k] + T[l])/2)
-#xprint(Tc)
+    Tc.append((T[k] +T[l])/2)
+
 
 
 L = np.array([40, 60, 80, 100])

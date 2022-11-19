@@ -44,19 +44,26 @@ int main(int argc, char *argv[])
     state.MC_cycle_sampling(j);
   }
 
-  // Print Monte Carlo solution
+  //calculate relative error
   double e_numeric = arma::mean(state.E_vec / N);
   double m_numeric = arma::mean(state.M_vec / N);
   double Cv_numeric = state.specific_heat_capacity();
   double X_numeric = state.magnetic_susceptibility();
 
+  double e_relerr = std::abs((e_numeric - e_analytic)/e_analytic);
+  double m_relerr = std::abs((m_numeric - m_analytic)/m_analytic);
+  double Cv_relerr = std::abs((Cv_numeric - Cv_analytic)/Cv_analytic);
+  double X_relerr = std::abs((X_numeric - X_analytic)/X_analytic);
+
+
+  // Print Monte Carlo solution
   std::cout << "2x2 comparison" << std::endl;
-  std::cout << "----------------------------------------------" << std::endl;
+  std::cout << "------------------------------------------------------" << std::endl;
   std::cout << "      Analytic solution   Monte Carlo solution" << std::endl;
-  std::cout << "e  : " << e_analytic << std::setw(21) << e_numeric << std::endl;
-  std::cout << "m  :  " << m_analytic << std::setw(21) << m_numeric << std::endl;
-  std::cout << "Cv :  " << Cv_analytic << std::setw(21) << Cv_numeric << std::endl;
-  std::cout << "X  :  " << X_analytic << std::setw(21) << X_numeric << std::endl;
+  std::cout << "e  : " << e_analytic << std::setw(21) << e_numeric << std::setw(21) << e_relerr << std::endl;
+  std::cout << "m  :  " << m_analytic << std::setw(21) << m_numeric  << std::setw(20) << m_relerr << std::endl;
+  std::cout << "Cv :  " << Cv_analytic << std::setw(21) << Cv_numeric  << std::setw(17) << Cv_relerr << std::endl;
+  std::cout << "X  :  " << X_analytic << std::setw(21) << X_numeric  << std::setw(14) << X_relerr << std::endl;
 
   return 0;
 }
