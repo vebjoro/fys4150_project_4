@@ -1,5 +1,21 @@
-- Problem 9
+- Problem 9 [X]
 
-- Lage en form for timer for parallelisert kode
+- Lage en form for timer for parallelisert kode [X]
 
-- Rapport
+Rapport
+--intro []
+--theory []
+--method []
+--results []
+--discussion []
+--conclusion []
+--abstract []
+
+---are all tasks answered? []
+---update results to most recent run [] (last day)
+---update method (or code) to match [] (last day)
+---check notation []
+---check grammar []
+---is everything clearly explained []
+---does the intro outline the contents? []
+---are the questions posed and answered in a clear manner? []
