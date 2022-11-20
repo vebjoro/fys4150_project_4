@@ -6,54 +6,54 @@ import pyarma as pa
 
 # Temperature first scan
 T1 = pa.mat()
-T1.load("./plot/binary_data/OMP_T_out.bin")
+T1.load("./plot/valuable_data/OMP_T_out.bin")
 T1 = np.array(T1)
 
 # Energy first scan
 e1 = pa.mat()
-e1.load("./plot/binary_data/OMP_e_out.bin")
+e1.load("./plot/valuable_data/OMP_e_out.bin")
 e1 = np.array(e1)
 
 # Magnetization first scan
 m1 = pa.mat()
-m1.load("./plot/binary_data/OMP_m_out.bin")
+m1.load("./plot/valuable_data/OMP_m_out.bin")
 m1 = np.array(m1)
 
 # Heat capacity first scan
 Cv1 = pa.mat()
-Cv1.load("./plot/binary_data/OMP_Cv_out.bin")
+Cv1.load("./plot/valuable_data/OMP_Cv_out.bin")
 Cv1 = np.array(Cv1)
 
 # Susceptibility first scan
 X1 = pa.mat()
-X1.load("./plot/binary_data/OMP_X_out.bin")
+X1.load("./plot/valuable_data/OMP_X_out.bin")
 X1 = np.array(X1)
 
 """____________________________________________________________________________"""
 
 # Temperature second scan
 T2 = pa.mat()
-T2.load("./plot/valuable_data/OMP_T_out.bin")
+T2.load("./plot/valuable_data_3/OMP_T_out.bin")
 T2 = np.array(T2)  # .T[0]  # Convert to numpy array and transpose
 
 # Energy second scan
 e2 = pa.mat()
-e2.load("./plot/valuable_data/OMP_e_out.bin")
+e2.load("./plot/valuable_data_3/OMP_e_out.bin")
 e2 = np.array(e2)
 
 # Magnetization second scan
 m2 = pa.mat()
-m2.load("./plot/valuable_data/OMP_m_out.bin")
+m2.load("./plot/valuable_data_3/OMP_m_out.bin")
 m2 = np.array(m2)
 
 # Heat capacity second scan
 Cv2 = pa.mat()
-Cv2.load("./plot/valuable_data/OMP_Cv_out.bin")
+Cv2.load("./plot/valuable_data_3/OMP_Cv_out.bin")
 Cv2 = np.array(Cv2)
 
 # Susceptibility second scan
 X2 = pa.mat()
-X2.load("./plot/valuable_data/OMP_X_out.bin")
+X2.load("./plot/valuable_data_3/OMP_X_out.bin")
 X2 = np.array(X2)
 
 # Merge the two scans
