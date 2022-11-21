@@ -19,6 +19,10 @@ MATRIX INDICES (Temprature, Initial state)
 0: T = 1, Random  |  1: T = 1, Ordered |  2: T = 2.4, Random |  3: T = 2.4, Ordered
 """
 n_cycles = len(E[0])
+label_fontsize = 16
+ticks_fontsize = 16
+legend_fontsize = 16
+
 
 """Plot"""
 
@@ -44,12 +48,17 @@ plt.plot(
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
-plt.legend()
+plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(
+    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
+)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
+plt.legend(prop={"size": legend_fontsize})
 plt.grid()
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
+plt.tight_layout()
 
 plt.savefig("plot/figures/20x20_1_E.pdf")
 
@@ -74,12 +83,18 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
-plt.legend()
+plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(
+    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
+)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
+plt.legend(prop={"size": legend_fontsize})
 plt.grid()
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
+plt.tight_layout()
+
 
 plt.savefig("plot/figures/20x20_24_E.pdf")
 
@@ -105,13 +120,17 @@ plt.plot(
     alpha=0.8,
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
-plt.xlabel("Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle |m| \rangle$", fontsize=16)
-plt.legend()
+plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(r"$\langle |m| \rangle$", fontsize=label_fontsize)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
+plt.legend(prop={"size": legend_fontsize})
 plt.grid()
 # Set background color to gray
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
+plt.tight_layout()
+
 
 plt.savefig("plot/figures/20x20_1_M.pdf")
 
@@ -137,12 +156,16 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Number of Monte Carlo cycles", fontsize=16)
-plt.ylabel(r"$\langle |m|\rangle$", fontsize=16)
-plt.legend()
+plt.xlabel("Number of Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(r"$\langle |m|\rangle$", fontsize=label_fontsize)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
+plt.legend(prop={"size": legend_fontsize})
 plt.grid()
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
+plt.tight_layout()
+
 
 plt.savefig("plot/figures/20x20_24_M.pdf")
 
@@ -158,11 +181,16 @@ e_24 = np.array(e_24)
 counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts / counts.sum(), bins, color="#4d8229")
-plt.xlabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
-plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;1.0)$", fontsize=16)
+plt.xlabel(
+    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
+)
+plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;1.0)$", fontsize=label_fontsize)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
 plt.tight_layout()
+
 
 plt.savefig("plot/figures/20x20_1_HIST.pdf")
 
@@ -170,8 +198,12 @@ plt.savefig("plot/figures/20x20_1_HIST.pdf")
 counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts / counts.sum(), bins, color="#4d8229")
-plt.xlabel(r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=16)
-plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;2.5)$", fontsize=16)
+plt.xlabel(
+    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=legend_fontsize
+)
+plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;2.5)$", fontsize=legend_fontsize)
+plt.xticks(fontsize=ticks_fontsize, rotation=45)
+plt.yticks(fontsize=ticks_fontsize)
 ax = plt.gca()
 ax.set_facecolor("#e6e6e6")
 plt.tight_layout()
