@@ -25,6 +25,10 @@ python3 plot plot/plot_20x20.py
 python3 plot plot/plot_OMP.py
 ```
 
+```
+python3 plot plot/plot_Tc.py
+```
+
 
 ### Dependencies
 - Armadillo (C++)
