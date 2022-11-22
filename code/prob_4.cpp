@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
   // Print Monte Carlo solution
   std::cout << "2x2 comparison" << std::endl;
   std::cout << "------------------------------------------------------" << std::endl;
-  std::cout << "      Analytic solution   Monte Carlo solution" << std::endl;
+  std::cout << "      Analytic solution   Monte Carlo solution   Relative error" << std::endl;
   std::cout << "e  : " << e_analytic << std::setw(21) << e_numeric << std::setw(21) << e_relerr << std::endl;
   std::cout << "m  :  " << m_analytic << std::setw(21) << m_numeric  << std::setw(20) << m_relerr << std::endl;
   std::cout << "Cv :  " << Cv_analytic << std::setw(21) << Cv_numeric  << std::setw(17) << Cv_relerr << std::endl;
