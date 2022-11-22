@@ -48,10 +48,8 @@ plt.plot(
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
-plt.ylabel(
-    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
-)
+plt.xlabel("Number of Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(r"$\langle \epsilon \rangle$ [$J$]", fontsize=label_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
 plt.legend(prop={"size": legend_fontsize})
@@ -83,10 +81,8 @@ plt.plot(
     label=r"T = 2.4 $J / k_B$, Ordered",
 )
 
-plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
-plt.ylabel(
-    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
-)
+plt.xlabel("Number of Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(r"$\langle \epsilon \rangle$ [$J$]", fontsize=label_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
 plt.legend(prop={"size": legend_fontsize})
@@ -120,8 +116,8 @@ plt.plot(
     alpha=0.8,
     label=r"T = 1.0 $J / k_B$, Ordered",
 )
-plt.xlabel("Monte Carlo cycles", fontsize=label_fontsize)
-plt.ylabel(r"$\langle |m| \rangle$", fontsize=label_fontsize)
+plt.xlabel("Number of Monte Carlo cycles", fontsize=label_fontsize)
+plt.ylabel(r"$\langle |m| \rangle$ [$-$]", fontsize=label_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
 plt.legend(prop={"size": legend_fontsize})
@@ -157,7 +153,7 @@ plt.plot(
 )
 
 plt.xlabel("Number of Monte Carlo cycles", fontsize=label_fontsize)
-plt.ylabel(r"$\langle |m|\rangle$", fontsize=label_fontsize)
+plt.ylabel(r"$\langle |m|\rangle$ [$-$]", fontsize=label_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
 plt.legend(prop={"size": legend_fontsize})
@@ -181,9 +177,7 @@ e_24 = np.array(e_24)
 counts, bins = np.histogram(e_1, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts / counts.sum(), bins, color="#4d8229")
-plt.xlabel(
-    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=label_fontsize
-)
+plt.xlabel(r"$\langle \epsilon \rangle$ [$J$]", fontsize=label_fontsize)
 plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;1.0)$", fontsize=label_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
@@ -198,9 +192,7 @@ plt.savefig("plot/figures/20x20_1_HIST.pdf")
 counts, bins = np.histogram(e_24, bins=400)
 fig = plt.figure(figsize=(6, 4.5))
 plt.stairs(counts / counts.sum(), bins, color="#4d8229")
-plt.xlabel(
-    r"$\langle \epsilon \rangle \: [J / \mathrm{spin}]$", fontsize=legend_fontsize
-)
+plt.xlabel(r"$\langle \epsilon \rangle$ [$J$]", fontsize=legend_fontsize)
 plt.ylabel(r"Estimation of $p_{\epsilon}(\epsilon;2.5)$", fontsize=legend_fontsize)
 plt.xticks(fontsize=ticks_fontsize, rotation=45)
 plt.yticks(fontsize=ticks_fontsize)
