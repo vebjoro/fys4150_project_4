@@ -15,9 +15,11 @@ int main(int argc, char *argv[])
   int number_of_temperatures = 24;
   int n_cycles = 2000000;
   int n_burn = 4000;
-  // arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures); // First scan
-  //  arma::vec T_vec = arma::linspace(2.26, 2.34, number_of_temperatures);
-  arma::vec T_vec = arma::linspace(2.265, 2.31, number_of_temperatures);
+
+  // arma::vec T_vec = arma::linspace(2.1, 2.4, number_of_temperatures);   // First scan
+  // arma::vec T_vec = arma::linspace(2.26, 2.34, number_of_temperatures); // Second scan
+  arma::vec T_vec = arma::linspace(2.265, 2.31, number_of_temperatures); // Third scan
+
   arma::mat e_out = arma::zeros(4, number_of_temperatures);
   arma::mat m_out = arma::zeros(4, number_of_temperatures);
   arma::mat Cv_out = arma::zeros(4, number_of_temperatures);

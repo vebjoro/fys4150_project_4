@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     state.MC_cycle_sampling(j);
   }
 
-  //calculate relative error
+  // Calculate relative error
   double e_numeric = arma::mean(state.E_vec / N);
   double m_numeric = arma::mean(state.M_vec / N);
   double Cv_numeric = state.specific_heat_capacity();
